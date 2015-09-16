@@ -1,4 +1,4 @@
-GECOS-Agent 
+#GECOS Agent 
 
 GECOS Agent is a piece of GECOS architecture. Installed onto a GECOS compatible distribution,
 makes it manageable from a remote GECOS Control Center.
@@ -6,15 +6,15 @@ makes it manageable from a remote GECOS Control Center.
 Version 2 substitutes a complex network of packages, configuration files and recipes with 
 a simple agent+notification app all in one package
 
-COMPONENTS
+## COMPONENTS
 
-Chef Client Wrapper
-GECOS First Login
-Configuration Files
+* Chef Client Wrapper
+* GECOS First Login
+* Configuration Files
 
 
 
-BUILDING
+## BUILDING
 
 GECOS-Agent has a python standard setup in src/
 This setup generates a debian souce package skel (using python setup.py sdist) in deb_dist
