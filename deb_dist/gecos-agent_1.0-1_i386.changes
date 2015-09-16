@@ -1,0 +1,28 @@
+Format: 1.8
+Date: Tue, 15 Sep 2015 09:31:24 +0200
+Source: gecos-agent
+Binary: gecos-agent
+Architecture: source all
+Version: 1.0-1
+Distribution: trusty
+Urgency: low
+Maintainer: Alfonso de Cala <alfonso.cala@juntadeandalucia.es>
+Changed-By: Alfonso de Cala <alfonso.cala@juntadeandalucia.es>
+Description: 
+ gecos-agent - GECOS Agent for workstations
+Changes: 
+ gecos-agent (1.0-1) trusty; urgency=low
+ .
+   * source package automatically created by stdeb 0.6.0+git
+Checksums-Sha1: 
+ 7041128197e1af62e0dfb3b9dcb9c3ab515f7dbf 557 gecos-agent_1.0-1.dsc
+ 643cfede25497f719d56539cdd3045ab8e5367fe 35525 gecos-agent_1.0-1.tar.gz
+ ffcc7bb4fa4d11840f24a3881f8a0d42da700651 34196 gecos-agent_1.0-1_all.deb
+Checksums-Sha256: 
+ bf850c881381e569ac1a98ddb14f68a9a6d1f1e5a56c8349c3cadd89250b637f 557 gecos-agent_1.0-1.dsc
+ 3dac22c3f156c14b9e1af8dfdbebcf29a57f9062c428278512d7b42b59063563 35525 gecos-agent_1.0-1.tar.gz
+ 561bc0c7f761b13ba488275a2075cfbc8d19bd36b2342d2b139a12698945e9c5 34196 gecos-agent_1.0-1_all.deb
+Files: 
+ 0b250f813e200d774cff7a0034849940 557 python optional gecos-agent_1.0-1.dsc
+ 8547e37d3e1b41444fd7b665b35524b9 35525 python optional gecos-agent_1.0-1.tar.gz
+ d25a4043468daaa79edd0d4c7964ad0c 34196 python optional gecos-agent_1.0-1_all.deb
