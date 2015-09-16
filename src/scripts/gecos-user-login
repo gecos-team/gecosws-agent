@@ -5,6 +5,7 @@
 if [[ -f $HOME/.gecos-firstlogin ]]
   then
     gecos-first-login 
+  else
+    sudo chef-client-wrapper  
 fi
-sudo chef-client
 

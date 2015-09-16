@@ -99,7 +99,7 @@ class FirstartWindow(Window):
         self.unblock()
 
     def translate(self):
-        self.set_title(_('Guadalinex GECOS Guide'))
+        self.set_title(_('GECOS First Login'))
         self.ui.btnTest.set_label(_('Test'))
         self.ui.btnClose.set_label(_('Close'))
 
@@ -137,7 +137,7 @@ class FirstartWindow(Window):
     def block(self):
         self.webview.load_uri(GECOS_BLOCKED_URI)
         self.ui.btnClose.set_sensitive(False)
-        self.ui.lblInfo.set_label(_('Please, wait while your system is being configured ...'))
+        self.ui.lblInfo.set_label(_('Please, wait while your system is configured...'))
 
     def unblock(self):
         self.webview.load_uri(GECOS_UNBLOCKED_URI)

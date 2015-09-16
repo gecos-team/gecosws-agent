@@ -36,7 +36,7 @@ def chef_is_configured():
     import os
     # Don't execute this assistant if chef its not configured
     
-    return os.path.exists('/etc/chef.control')
+    return os.path.exists('/etc/chef/client.rb')
 
 
 def dbusservice():
@@ -80,6 +80,6 @@ def main():
                 Gtk.main_iteration()
         Gtk.main()
     except Exception as e:
-        fp = open("/tmp/firstart.err", "w")
+        fp = open("/tmp/gecos-first-login.err", "w")
         fp.write(str(e))
         fp.close()

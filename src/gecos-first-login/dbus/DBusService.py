@@ -61,10 +61,10 @@ class DBusService(dbus.service.Object):
     def run_subprocess(self):
         if self.state == STATE_RUNNING:
             return
-        log_chef_solo = open('/tmp/gecos-chef-firstlogin', "w", 1)
-        log_chef_solo_err = open('/tmp/gecos-chef-firstlogin-err', "w", 1)
-        log_chef_solo1 = open('/tmp/gecos-chef-firstart.1', "w", 1)
-        log_chef_solo_err1 = open('/tmp/gecos-chef-firstlogin-err.1', "w", 1)
+        log_chef = open('/tmp/gecos-chef-firstlogin', "w", 1)
+        log_chef_err = open('/tmp/gecos-chef-firstlogin-err', "w", 1)
+        log_chef1 = open('/tmp/gecos-chef-firstart.1', "w", 1)
+        log_chef_err1 = open('/tmp/gecos-chef-firstlogin-err.1', "w", 1)
         self.set_state(STATE_RUNNING)
         cmd_check = 'gecos-snitch-client --get-active'
         self.log('Checking for a running chef-client instance...')
@@ -78,17 +78,18 @@ class DBusService(dbus.service.Object):
                 tries = tries+1
             else:
                 break
-        #Run two chef-client cause its necessary for GCC
+        #Run two chef-clients cause its necessary for GCC
+        #TODO: Change this to only one execution
         if tries<30:
             envs = os.environ
 #            envs['LANG'] = 'es_ES.UTF-8'
             cmd = 'gecos-chef-client-wrapper'
             self.log('Calling subprocess: ' + cmd)
             args = shlex.split(cmd)
-            self.process = subprocess.Popen(args,stdout=log_chef_solo, stderr=log_chef_solo_err, env=envs)
+            self.process = subprocess.Popen(args,stdout=log_chef, stderr=log_chef_err, env=envs)
             self.process.wait()
             time.sleep(16)
-            self.process = subprocess.Popen(args,stdout=log_chef_solo1, stderr=log_chef_solo_err1, env=envs)
+            self.process = subprocess.Popen(args,stdout=log_chef1, stderr=log_chef_err1, env=envs)
             self.process.wait()
 
             GLib.timeout_add_seconds(1, self.check_state)
@@ -137,7 +138,7 @@ class DBusService(dbus.service.Object):
 
     @dbus.service.method(DBUS_SERVICE)
     def stop(self):
-        self.log('Stopping the DBusService for org.guadalinex.firstart')
+        self.log('Stopping the DBusService for org.gecos.firstart')
         self.loop.quit()
 
     @dbus.service.method(DBUS_SERVICE)
