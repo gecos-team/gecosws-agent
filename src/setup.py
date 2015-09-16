@@ -5,11 +5,11 @@ import glob
 
 setup(name='gecos-agent',
       version='1.0',
-      description='GECOS Agent for workstations',
+      description='GECOS Agent for Workstations',
       author='Alfonso de Cala',
       author_email='alfonso.cala@juntadeandalucia.es',
       url='https://github.com/gecos-team/gecosws-agent',
-      scripts=['scripts/gecos-first-login', 'scripts/gecos-chef-client-wrapper','scripts/gecos-first-login-dbusservice','scripts/gecos-snitch-client','scripts/gecos-snitch-service','scripts/gecos-snitch-signal-listener.py','scripts/gecos-snitch-systray'],
+      scripts=['scripts/gecos-user-login', 'scripts/gecos-first-login', 'scripts/gecos-chef-client-wrapper','scripts/gecos-first-login-dbusservice','scripts/gecos-snitch-client','scripts/gecos-snitch-service','scripts/gecos-snitch-signal-listener.py','scripts/gecos-snitch-systray'],
       packages=['gecos-first-login','gecos-first-login_lib','gecos-first-login.assistant','gecos-first-login.dbus'],
       data_files=[('/usr/share/gecos-first-login/html/',glob.glob('data/html/*')),
                   ('/usr/share/gecos-first-login/ui/',glob.glob('data/ui/*')),
