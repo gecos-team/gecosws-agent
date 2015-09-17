@@ -12,8 +12,8 @@ class FirstartEntry(IniFile):
 
         self.content = dict()
 
-        self.config_path = os.path.join(os.environ.get('HOME'), '.config/firstart')
-        self.config_file = os.path.join(self.config_path, 'firstart.conf')
+        self.config_path = os.path.join(os.environ.get('HOME'), '.config/gecos/')
+        self.config_file = os.path.join(self.config_path, 'firstart')
 
         if not os.path.exists(self.config_path):
             os.makedirs(self.config_path)

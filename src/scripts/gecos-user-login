@@ -2,7 +2,7 @@
 # GECOS user login
 # this script autolaunches on user login
 # if this is a first login, invokes gecos-firstlogin in order to lock up the screen until polices apply
-if [[ -f $HOME/.gecos-firstlogin ]]
+if [[! -f $HOME/.config/gecos/firstlogin ]]
   then
     gecos-first-login 
   else
