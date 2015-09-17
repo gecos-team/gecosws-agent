@@ -2,7 +2,7 @@ Package: gecos-agent
 Version: 1.0-1
 Architecture: all
 Maintainer: Alfonso de Cala <alfonso.cala@juntadeandalucia.es>
-Installed-Size: 184
+Installed-Size: 225
 Depends: python (>= 2.6.6-3)
 Conflicts: gecosws-chef-notifier-cinnamon, gecosws-chef-snitch, gecosws-firstart
 Replaces: gecosws-chef-notifier-cinnamon, gecosws-chef-snitch, gecosws-firstart

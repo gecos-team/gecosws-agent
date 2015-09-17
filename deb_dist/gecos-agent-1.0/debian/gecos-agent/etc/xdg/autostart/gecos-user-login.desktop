@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=GECOS User Login 
+Exec=/usr/bin/python /usr/bin/gecos-user-login
+OnlyShowIn=GNOME;Unity;LXDE
+NoDisplay=true
+StartupNotify=false
+X-GNOME-Autostart-Phase=Application
+X-GNOME-Autostart-Notify=false
+X-GNOME-AutoRestart=false
+X-Ubuntu-Gettext-Domain=gecos-user-login

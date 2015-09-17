@@ -2,5 +2,5 @@
 /etc/init/gecos-first-login.conf
 /etc/dbus-1/system.d/org.gecos.firstlogin.conf
 /etc/dbus-1/system.d/org.gecos.snitch.conf
-/etc/xdg/autostart/gecos-first-login.desktop
 /etc/xdg/autostart/gecos-snitch-systray.desktop
+/etc/xdg/autostart/gecos-user-login.desktop

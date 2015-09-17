@@ -32,8 +32,8 @@ import gobject
 import dbus
 import dbus.mainloop.glib
 
-DBUS_INTERFACE = 'org.guadalinex.ChefSnitch'
-DBUS_PATH = '/org/guadalinex/ChefSnitch'
+DBUS_INTERFACE = 'org.gecos.ChefSnitch'
+DBUS_PATH = '/org/gecos/ChefSnitch'
 
 def get_is_active():
     remote_object = bus.get_object(DBUS_INTERFACE, DBUS_PATH)
