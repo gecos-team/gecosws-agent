@@ -31,8 +31,9 @@ a simple agent+notification app all in one package
 ## BUILDING
 
 GECOS-Agent has a python standard setup in src/
-This setup generates a debian souce package skel (using python setup.py sdist) in deb_dist
+This setup generates a debian source package skel (using python setup.py sdist from src/) in deb_dist
+Then, with py2dsc --maintainer "NAME <EMAIL> src/dist/gecos-agent-1.0.tar.gz --suite trusty
 Finally, a debian package is constructed with debuild in deb_dist/gecos-agent-1.0 after
-some configuration tuning
+some configuration tuning (debian/control, debian/copyright, debian/changelog)
 
 
