@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=GECOS Snitch Systray
-Comment=GECOS Snitch Systray icon
-Exec=gecos-snitch-systray
-Terminal=false
-NoDisplay=true
-Name[es_ES]=Lanzador para el panel GECOS
