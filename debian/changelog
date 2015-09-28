@@ -1,3 +1,8 @@
+gecos-agent (1.0-2) trusty; urgency=low
+
+  * Fixed path in firstart login service
+
+ -- Alfonso de Cala <alfonso.cala@juntadeandalucia.es>  Thu, 28 Sep 2015 14:00:39 +0200
 gecos-agent (1.0-1) trusty; urgency=low
 
   * source package automatically created by stdeb 0.6.0+git
