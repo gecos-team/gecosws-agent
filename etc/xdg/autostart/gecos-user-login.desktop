@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=GECOS User Login 
-Exec=/usr/bin/python /usr/bin/gecos-user-login
+Exec=/usr/bin/gecos-user-login
 OnlyShowIn=GNOME;Unity;LXDE
 NoDisplay=true
 StartupNotify=false
