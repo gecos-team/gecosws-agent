@@ -6,7 +6,7 @@ from xdg.IniFile import *
 
 class FirstartEntry(IniFile):
 
-    default_group = 'Firstart Entry'
+    default_group = 'Firstlogin Entry'
 
     def __init__(self):
 
@@ -28,7 +28,7 @@ class FirstartEntry(IniFile):
         fd = open(self.config_file, 'w')
         if fd != None:
             fd.write('[Firstlogin Entry]\n')
-            fd.write('firslogin=0\n')
+            fd.write('firstlogin=0\n')
             fd.close()
 
     def get_firstart(self):
