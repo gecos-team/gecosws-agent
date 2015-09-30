@@ -1,3 +1,8 @@
+gecos-agent (1.1-2) trusty; urgency=low
+
+  * Fixed minor bugs in semaphore file and gecos-user-login script
+
+ -- Alfonso de Cala <alfonso.cala@juntadeandalucia.es>  Wed, 30 Sep 2015 11:50:39 +0200
 gecos-agent (1.1-1) trusty; urgency=low
 
   * Renamed some old firstart methods
