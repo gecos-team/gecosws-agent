@@ -13,7 +13,7 @@ class FirstartEntry(IniFile):
         self.content = dict()
 
         self.config_path = os.path.join(os.environ.get('HOME'), '.config/gecos/')
-        self.config_file = os.path.join(self.config_path, 'firstart')
+        self.config_file = os.path.join(self.config_path, 'firstlogin')
 
         if not os.path.exists(self.config_path):
             os.makedirs(self.config_path)
@@ -27,17 +27,17 @@ class FirstartEntry(IniFile):
 
         fd = open(self.config_file, 'w')
         if fd != None:
-            fd.write('[Firstart Entry]\n')
-            fd.write('firstart=0\n')
+            fd.write('[Firstlogin Entry]\n')
+            fd.write('firslogin=0\n')
             fd.close()
 
     def get_firstart(self):
-        fs = self.get('firstart').strip()
+        fs = self.get('firstlogin').strip()
         fs = bool(int(fs))
         return fs
 
     def set_firstart(self, value):
-        self.set('firstart', value)
+        self.set('firstlogin', value)
         self.write()
 
     def remove_flag(self):

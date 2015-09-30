@@ -57,7 +57,7 @@ def main():
         return
 
     from gi.repository import Gtk
-    from firstart_lib.FirstartEntry import FirstartEntry
+    from gecosfirstlogin_lib.FirstartEntry import FirstartEntry
     from assistant.FirstartWindow import FirstartWindow
     import os
     if lsb_release.get_distro_information()['DESCRIPTION'] == 'Gecos V2 Lite':

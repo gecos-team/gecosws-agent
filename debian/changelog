@@ -1,3 +1,8 @@
+gecos-agent (1.1-1) trusty; urgency=low
+
+  * Renamed some old firstart methods
+
+ -- Alfonso de Cala <alfonso.cala@juntadeandalucia.es>  Wed, 30 Sep 2015 10:50:39 +0200
 gecos-agent (1.1-0) trusty; urgency=low
 
   * Rename python library to avoid hyphens

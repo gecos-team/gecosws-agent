@@ -49,7 +49,7 @@ class FirstartWindow(Window):
 
     def finish_initializing(self, builder):   # pylint: disable=E1002
 
-        self.sm = SessionManager('gecos-firstart')
+        self.sm = SessionManager('gecos-first-login')
         self.sm.start()
 
         iconfile = config.get_data_file('media', '%s' % ('wizard1.png',))

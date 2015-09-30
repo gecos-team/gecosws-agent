@@ -78,4 +78,4 @@ elif get_prefix() == '/usr':
 
 if __name__ == '__main__':
 
-    firstart.dbusservice()
+    gecosfirstlogin.dbusservice()
