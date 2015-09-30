@@ -23,9 +23,9 @@ __license__ = "GPL-2"
 
 from gi.repository import Gdk
 from gi.repository import WebKit as webkit
-from firstart_lib.Window import Window
-from firstart.dbus.DBusClient import DBusClient
-import firstart_lib.config as config
+from gecosfirstlogin_lib.Window import Window
+from gecosfirstlogin.dbus.DBusClient import DBusClient
+import gecosfirstlogin_lib.config as config
 from SessionManager import SessionManager
 import time
 import math

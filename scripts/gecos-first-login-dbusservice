@@ -67,9 +67,8 @@ insert_paths([
 if python_path:
     os.putenv('PYTHONPATH', "%s:%s" % (os.getenv('PYTHONPATH', ''), ':'.join(python_path))) # for subprocesses
 
-
-import firstart
-from firstart_lib.config import get_prefix
+import gecosfirstlogin
+from gecosfirstlogin_lib.config import get_prefix
 
 if get_prefix() == '/usr/local':
     gettext.bindtextdomain('firstart', '/usr/local/share/locale')
