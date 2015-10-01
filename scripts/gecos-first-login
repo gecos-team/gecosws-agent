@@ -29,45 +29,6 @@ import gettext
 from gettext import gettext as _
 
 
-# Add project root directory (enable symlink and trunk execution)
-PROJECT_ROOT_DIRECTORY = os.path.abspath(
-    os.path.dirname(os.path.dirname(os.path.realpath(sys.argv[0]))))
-
-python_path = []
-if os.path.abspath(__file__).startswith('/opt'):
-    syspath = sys.path[:] # copy to avoid infinite loop in pending objects
-    for path in syspath:
-        opt_path = path.replace('/usr', '/opt/extras.ubuntu.com/firstart')
-        python_path.insert(0, opt_path)
-        sys.path.insert(0, opt_path)
-
-if (os.path.exists(os.path.join(PROJECT_ROOT_DIRECTORY, 'firstart'))
-    and PROJECT_ROOT_DIRECTORY not in sys.path):
-    python_path.insert(0, PROJECT_ROOT_DIRECTORY)
-    sys.path.insert(0, PROJECT_ROOT_DIRECTORY)
-
-
-def insert_paths(paths=[]):
-    for path in paths:
-        if os.path.exists(path) and path not in sys.path:
-            python_path.insert(0, path)
-            sys.path.insert(0, path)
-
-
-insert_paths([
-    '/usr/local/lib/python2.7/dist-packages',
-    '/usr/lib/python2.7/dist-packages',
-    '/usr/local/lib/python2.7/site-packages',
-    '/usr/lib/python2.7/site-packages',
-#    '/usr/local/share/pyshared',
-#    '/usr/share/pyshared'
-])
-
-
-if python_path:
-    os.putenv('PYTHONPATH', "%s:%s" % (os.getenv('PYTHONPATH', ''), ':'.join(python_path))) # for subprocesses
-
-
 import gecosfirstlogin
 from gecosfirstlogin_lib.config import get_prefix
 
