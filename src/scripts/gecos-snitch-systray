@@ -70,7 +70,8 @@ class ChefSnitchSystray:
 
     def __trigger_update(self, data):
         if (os.path.exists("/usr/bin/gecos-chef-client-wrapper")):
-            subprocess.Popen(["gksudo", "/usr/bin/gecos-chef-client-wrapper"])
+        # gecos-chef-client-wrapper called with parameter "now" to avoid delayed execution
+            subprocess.Popen(["gksudo", "/usr/bin/gecos-chef-client-wrapper now"])
         else:
             subprocess.Popen(["gksudo", "/usr/bin/chef-client"])
 

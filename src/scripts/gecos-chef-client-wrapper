@@ -9,6 +9,9 @@ import sys
 import requests
 import json
 import subprocess
+import time
+import random
+
 if __name__ == '__main__':
     fp = open('/tmp/gecos-chef-client-wrapper.log', "w")
     args = sys.argv
@@ -19,6 +22,20 @@ if __name__ == '__main__':
         fp.write("This workstation is not linked to a Control Center")
         fp.close()
         sys.exit(1)
+    # Random delay to avoid server congestion, between 0s and 10 minutes (600s)
+    # gecos-chef-client-wrapper should be called as "gecos-chef-client-wrapper now" to avoid delayed execution
+    # see gecos-snitch-systray, line 74
+    # TODO: Move the maximum delay to a configuration file
+    max_delay = 600
+    if len(args) > 0:    
+        if args[0] == 'now':
+            args.pop(0)
+            lapse = 0
+    else:
+        lapse = random.randint(0, max_delay)
+        fp.write("Client delayed "+str(lapse)+" seconds to avoid congestion.\n")
+    time.sleep(lapse)      
+        
     content = gcc_flag.read()
     gcc_flag.close()
     gcc_flag_json = json.loads(content)
