@@ -1,3 +1,9 @@
+gecos-agent (1.1-1) trusty; urgency=low
+
+  * A random delay is added when wrapper is launched from cron 
+
+ -- Alfonso de Cala <alfonso.cala@juntadeandalucia.es>  Thu, 25 Aug 2016 09:00:39 +0200
+
 gecos-agent (1.0-1) trusty; urgency=low
 
   * source package automatically created by stdeb 0.6.0+git
