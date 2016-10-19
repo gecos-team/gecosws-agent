@@ -16,6 +16,7 @@ setup(name='gecos-agent',
                   ('/usr/share/gecos-first-login/media',glob.glob('data/media/*')),
                   ('/etc/dbus-1/system.d/',glob.glob('etc/dbus-1/system.d/*.conf')),
                   ('/etc/init/',glob.glob('etc/init/*.conf')),
+                  ('/lib/systemd/system/',glob.glob('lib/systemd/system/*.service')),
                   ('/etc/xdg/autostart/',glob.glob('etc/xdg/autostart/*.desktop'))]
      )
 
