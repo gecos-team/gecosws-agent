@@ -56,6 +56,7 @@ class SessionManager:
 
     def log(self, message, priority=syslog.LOG_INFO):
         syslog.syslog(priority, message)
+        print("SessionManager: %s"%(message))
 
     def start(self):
         if self.state == 1:
@@ -64,8 +65,7 @@ class SessionManager:
         if self.desktop_autostart_id is None:
             self.log('This script is intended to be executed from xdg-autostart, \
 inside a gnome-session context.', syslog.LOG_ERR)
-            #return False
-            self.desktop_autostart_id = 0
+            self.desktop_autostart_id = '0'
 
         session_bus = dbus.SessionBus()
         self.sm_proxy = session_bus.get_object(SM_DBUS_SERVICE, SM_DBUS_OBJECT_PATH)
