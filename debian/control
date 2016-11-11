@@ -7,7 +7,7 @@ Standards-Version: 3.9.5
 
 Package: gecos-agent
 Architecture: all
-Depends: python (>= 2.6.6-3), python-notify
+Depends: python (>= 2.6.6-3), python-notify, chef
 Breaks: gecosws-firstart, gecosws-chef-snitch, gecosws-chef-notifier-cinnamon
 Replaces: gecosws-firstart, gecosws-chef-snitch, gecosws-chef-notifier-cinnamon
 Description: GECOS Agent for workstations

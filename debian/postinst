@@ -9,3 +9,6 @@ grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
 # Set the services to start at boot
 systemctl enable gecos-snitch-service.service
 systemctl enable gecos-first-login.service
+
+# Disable chef client service
+systemctl disable chef-client.service
