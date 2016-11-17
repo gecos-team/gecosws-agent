@@ -36,7 +36,7 @@ def chef_is_configured():
     import os
     # Don't execute this assistant if chef its not configured
     
-    return (os.path.exists('/etc/chef/client.rb') && (os.path.getsize('/etc/chef/client.rb') > 0L))
+    return (os.path.exists('/etc/chef/client.rb') and (os.path.getsize('/etc/chef/client.rb') > 0L))
 
 
 def dbusservice():
