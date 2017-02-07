@@ -12,13 +12,3 @@ systemctl enable gecos-first-login.service
 
 # Disable chef client service
 systemctl disable chef-client.service
-
-# Enforce /home/* directories security
-# set directories permissions to 0700 
-# set files permissions to 0600
-sed -i 's/^UMASK.*/UMASK\t\t077/' /etc/login.defs
-sed -i 's/^USERGROUPS_ENAB yes/USERGROUPS_ENAB no/' /etc/login.defs
-sed -i 's/^DIR_MODE=0755/DIR_MODE=0700/' /etc/adduser.conf
-
-find /etc/skel -type f -exec chmod 600 \{\} \;
-find /etc/skel -type d -exec chmod 700 \{\} \;
