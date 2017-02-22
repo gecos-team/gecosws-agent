@@ -14,6 +14,7 @@ import random
 import re
 
 if __name__ == '__main__':
+    os.environ["HOME"] = "/root"
     fp = open('/tmp/gecos-chef-client-wrapper.log', "w")
     args = sys.argv
     args.pop(0)
