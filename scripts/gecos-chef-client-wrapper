@@ -12,6 +12,11 @@ import subprocess
 import time
 import random
 import re
+import datetime
+
+# Logs data files other than Chef client logs
+OTHER_LOGS_DATA_FILES = ['/var/log/automatic-updates.log', '/var/log/automatic-updates.err']
+
 
 if __name__ == '__main__':
     os.environ["HOME"] = "/root"
@@ -46,6 +51,7 @@ if __name__ == '__main__':
     node_id = gcc_flag_json['gcc_nodename']
     fp.write("Connecting to GECOS Control Center api\n")
     try:
+        # Reserve Chef node
         res = requests.put(url+'/chef-client/run/', data={"node_id":node_id, "gcc_username":gcc_flag_json['gcc_username']},verify=False)
     except Exception as e:
         fp.write("Error connecting with GECOS Control Center\n")
@@ -53,19 +59,64 @@ if __name__ == '__main__':
         fp.close()
         sys.exit(1)
     if res.ok and res.json()['ok']:
+        # Run Chef client
         cmd = ['/usr/bin/chef-client']
         cmd = cmd + args
-        process = subprocess.Popen(cmd)
-        process.wait()
-        fp.write(str(process.returncode) + '\n')
-        if process.returncode != 0:
-            fp.write("Send chef-client error to GECOS Control Center\n")
-            fp.close()
-            sys.exit(1)
-        else:
+        returnval = 0
+        try:
+            chef_client_output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
+            fp.write('Returned code: 0\n')
             fp.write("OK\n")
-            fp.close()
-            sys.exit(0)
+        except subprocess.CalledProcessError as e:
+            fp.write('Returned code: %d\n' % (e.returncode))
+            fp.write("Send chef-client error to GECOS Control Center\n")
+            returnval = 1
+        except OSError as e:
+            fp.write("failed to execute chef-client: %s" % (str(e)))
+            fp.write("Send chef-client error to GECOS Control Center\n")
+            
+        # Check if this computer is in debug mode
+        debug_mode_json = {}
+        if os.path.isfile('/etc/gecos/debug_mode') and os.access('/etc/gecos/debug_mode', os.R_OK):
+            with open('/etc/gecos/debug_mode', 'r') as debug_mode_file:
+                debug_mode_content = debug_mode_file.read()
+                debug_mode_json = json.loads(debug_mode_content)
+            
+        if 'debug_mode' in debug_mode_json and debug_mode_json['debug_mode']:
+            # Send logs data to GECOS Control Center
+            logs_data = {}
+            logs_data['date'] = datetime.datetime.now().isoformat()
+            logs_data['files'] = {}
+            logs_data['files']['chef-client.log'] = chef_client_output
+            
+            # Read other logs data files
+            for f in OTHER_LOGS_DATA_FILES:
+                if os.path.isfile(f) and os.access(f, os.R_OK):
+                    with open(f, 'r') as logfile:
+                        data=logfile.read()
+                        logs_data['files'][os.path.basename(f)] = data
+                    
+                else:
+                    fp.write("Can't read file: %s\n" % (f))
+            
+            # Send data
+            try:
+                # Send logs data
+                res = requests.post(url+'/chef-client/run/', data={"node_id":node_id, "gcc_username":gcc_flag_json['gcc_username'], "logs": json.dumps(logs_data)}, verify=False)
+            except Exception as e:
+                fp.write("Error connecting with GECOS Control Center\n")
+                fp.write(str(e))
+                fp.close()
+                sys.exit(1)
+            if res.ok and res.json()['ok']:  
+                fp.write("Logs data successfully sent to GECOS Control Center\n")
+            elif res.ok:
+                fp.write("Error sending log data to GECOS Control Center: %s\n"%(res.json()['message']))
+            else:
+                fp.write("Error sending log data to GECOS Control Center\n")
+            
+        fp.close()
+        sys.exit(returnval)
     else:
         fp.write("Error talking with GECOS Control Center\n")
         fp.close()
