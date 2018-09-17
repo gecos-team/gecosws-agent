@@ -64,16 +64,33 @@ if __name__ == '__main__':
         cmd = cmd + args
         returnval = 0
         try:
-            chef_client_output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
-            fp.write('Returned code: 0\n')
-            fp.write("OK\n")
-        except subprocess.CalledProcessError as e:
-            fp.write('Returned code: %d\n' % (e.returncode))
-            fp.write("Send chef-client error to GECOS Control Center\n")
-            returnval = 1
+            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+            # Getting child process ouput to screen and into variable
+            chef_client_output = ''
+            while True:
+                line = process.stdout.readline().rstrip()
+                chef_client_output += line
+                if not line and process.poll() is not None:
+                    break
+                if line:
+                    print line
+
+            childstatus = process.poll()
+
+            if childstatus != 0:
+                fp.write('Returned code: %d\n' % (childstatus))
+                fp.write("Send chef-client error to GECOS Control Center\n")
+                fp.close()
+                returnval = 1
+            else:
+                fp.write('Returned code: 0\n')
+                fp.write("OK\n")
+
         except OSError as e:
             fp.write("failed to execute chef-client: %s" % (str(e)))
             fp.write("Send chef-client error to GECOS Control Center\n")
+            returnval = 1
             
         # Check if this computer is in debug mode
         debug_mode_json = {}
