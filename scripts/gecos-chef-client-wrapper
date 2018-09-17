@@ -81,7 +81,6 @@ if __name__ == '__main__':
             if childstatus != 0:
                 fp.write('Returned code: %d\n' % (childstatus))
                 fp.write("Send chef-client error to GECOS Control Center\n")
-                fp.close()
                 returnval = 1
             else:
                 fp.write('Returned code: 0\n')
@@ -91,7 +90,7 @@ if __name__ == '__main__':
             fp.write("failed to execute chef-client: %s" % (str(e)))
             fp.write("Send chef-client error to GECOS Control Center\n")
             returnval = 1
-            
+
         # Check if this computer is in debug mode
         debug_mode_json = {}
         if os.path.isfile('/etc/gecos/debug_mode') and os.access('/etc/gecos/debug_mode', os.R_OK):
