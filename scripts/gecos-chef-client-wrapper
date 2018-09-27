@@ -69,7 +69,7 @@ if __name__ == '__main__':
             # Getting child process ouput to screen and into variable
             chef_client_output = ''
             while True:
-                line = process.stdout.readline().rstrip()
+                line = process.stdout.readline()
                 chef_client_output += line
                 if not line and process.poll() is not None:
                     break
