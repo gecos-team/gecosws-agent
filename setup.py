@@ -4,7 +4,7 @@ from distutils.core import setup
 import glob
 
 setup(name='gecos-agent',
-      version='1.2',
+      version='1.3',
       description='GECOS Agent for Workstations',
       author='Alfonso de Cala',
       author_email='alfonso.cala@juntadeandalucia.es',
