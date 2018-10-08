@@ -1,8 +1,14 @@
+gecos-agent (1.4-1) xenial; urgency=low
+
+  * Autoupdate of agent and chef-client
+
+ -- Alfonso de Cala <alfonso.cala@juntadeandalucia.es>  Thu, 8 Oct 2018 12:00:00 +0200
+
 gecos-agent (1.3-1) xenial; urgency=low
 
   * Gather logs and send them to Control Center for debugging purposes
 
- -- Alfonso de Cala <alfonso.cala@juntadeandalucia.es>  Thu, 27 Sep 2016 12:00:00 +0200
+ -- Alfonso de Cala <alfonso.cala@juntadeandalucia.es>  Thu, 27 Sep 2018 12:00:00 +0200
 
 gecos-agent (1.2-1) trusty; urgency=low
 
