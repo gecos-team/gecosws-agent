@@ -18,6 +18,7 @@ import datetime
 OTHER_LOGS_DATA_FILES = ['/var/log/automatic-updates.log', '/var/log/automatic-updates.err']
 
 
+
 if __name__ == '__main__':
     os.environ["HOME"] = "/root"
     fp = open('/tmp/gecos-chef-client-wrapper.log', "w")
@@ -49,6 +50,13 @@ if __name__ == '__main__':
     gcc_flag_json = json.loads(content)
     url = gcc_flag_json['uri_gcc']
     node_id = gcc_flag_json['gcc_nodename']
+
+    new_version=$(aptitude search '?and(?upgradable,?exact-name(chef))')
+    if [ -n "$new_version" ]; then 
+        fp.write("New Chef-Client version available. Upgrading before client execution.\n"; 
+        apt install chef 
+    fi
+
     fp.write("Connecting to GECOS Control Center api\n")
     try:
         # Reserve Chef node
@@ -132,8 +140,14 @@ if __name__ == '__main__':
                 fp.write("Error sending log data to GECOS Control Center\n")
             
         fp.close()
-        sys.exit(returnval)
+
+# Restarting agent if flag file (created in a chef recipe) exists
+        if if os.path.isfile("/tmp/gecos-agent-restart.tmp"):
+            os.exec(__file__)    
+        else:
+            sys.exit(returnval)
     else:
         fp.write("Error talking with GECOS Control Center\n")
         fp.close()
         sys.exit(1)
+
