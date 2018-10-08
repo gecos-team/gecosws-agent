@@ -14,8 +14,8 @@ import random
 import re
 import datetime
 
-# Logs data files other than Chef client logs
-OTHER_LOGS_DATA_FILES = ['/var/log/automatic-updates.log', '/var/log/automatic-updates.err']
+# Log data files other than Chef client logs
+OTHER_LOG_DATA_FILES = ['/var/log/automatic-updates.log', '/var/log/automatic-updates.err']
 
 
 
@@ -114,7 +114,7 @@ if __name__ == '__main__':
             logs_data['files']['chef-client.log'] = chef_client_output
             
             # Read other logs data files
-            for f in OTHER_LOGS_DATA_FILES:
+            for f in OTHER_LOG_DATA_FILES:
                 if os.path.isfile(f) and os.access(f, os.R_OK):
                     with open(f, 'r') as logfile:
                         data=logfile.read()
