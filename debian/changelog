@@ -1,3 +1,9 @@
+gecos-agent (1.4-3ubuntu1) xenial; urgency=medium
+
+  * Fix typo
+
+ -- Alfonso de Cala <alfem@SDTPC302>  Wed, 28 Nov 2018 09:53:04 +0100
+
 gecos-agent (1.4-2) xenial; urgency=medium
 
   * Fix autoupdate script

@@ -54,12 +54,12 @@ if __name__ == '__main__':
 # GECOS Agent and Chef Client Autoupdate
     new_version_available=subprocess.check_output(["aptitude","search","?and(?upgradable,?exact-name(gecos-agent))"])
     if new_version_available:
-        fp.write("New GECOS Agent version available. Upgrading.\n"; 
+        fp.write("New GECOS Agent version available. Upgrading.\n" 
         subprocess.call(["apt","install","gecos-agent"]) 
     fi
     new_version_available=subprocess.check_output(["aptitude","search","?and(?upgradable,?exact-name(chef))"])
     if new_version_available:
-        fp.write("New Chef Client version available. Upgrading before client execution.\n"; 
+        fp.write("New Chef Client version available. Upgrading before client execution.\n" 
         subprocess.call(["apt","install","chef"]) 
     fi
 
