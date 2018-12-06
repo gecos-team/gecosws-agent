@@ -33,7 +33,7 @@ a simple agent+notification app all in one package
 GECOS-Agent has a python standard setup script
 
 You can use this setup to generate a source distribution gz (using python setup.py sdist) in deb_dist and then use
- py2dsc --suite trusty dist/gecos-agent-X.Y.tar.gz  to generate Debian source package (change X.Y properly).
+ py2dsc --suite trusty dist/gecosws-agent-X.Y.tar.gz  to generate Debian source package (change X.Y properly).
 
 Or just launch a dpkg-buildpackage and use the .deb created in the parent directory.
  

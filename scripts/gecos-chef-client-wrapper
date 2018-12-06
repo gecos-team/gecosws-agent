@@ -52,10 +52,10 @@ if __name__ == '__main__':
     node_id = gcc_flag_json['gcc_nodename']
 
 # GECOS Agent and Chef Client Autoupdate
-    new_version_available=subprocess.check_output(["aptitude","search","?and(?upgradable,?exact-name(gecos-agent))"])
+    new_version_available=subprocess.check_output(["aptitude","search","?and(?upgradable,?exact-name(gecosws-agent))"])
     if new_version_available:
         fp.write("New GECOS Agent version available. Upgrading.\n" 
-        subprocess.call(["apt","install","gecos-agent"]) 
+        subprocess.call(["apt","install","gecosws-agent"]) 
     fi
     new_version_available=subprocess.check_output(["aptitude","search","?and(?upgradable,?exact-name(chef))"])
     if new_version_available:
@@ -149,8 +149,8 @@ if __name__ == '__main__':
         fp.close()
 
 # Restarting agent if flag file (created in a chef recipe) exists
-        if if os.path.isfile("/tmp/gecos-agent-force-restart.tmp"):
-            os.remove("/tmp/gecos-agent-force-restart.tmp")
+        if if os.path.isfile("/tmp/gecosws-agent-force-restart.tmp"):
+            os.remove("/tmp/gecosws-agent-force-restart.tmp")
             python = sys.executable
             os.execl(python, python, *sys.argv)
         else:

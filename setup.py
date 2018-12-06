@@ -3,7 +3,7 @@
 from distutils.core import setup
 import glob
 
-setup(name='gecos-agent',
+setup(name='gecosws-agent',
       version='1.4',
       description='GECOS Agent for Workstations',
       author='Alfonso de Cala',
