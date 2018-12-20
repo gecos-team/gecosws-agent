@@ -1,7 +1,7 @@
 #!/bin/sh
 # Delete permissions for all users to run a chef-client
 
-PATTERN='/usr/bin/gecos-chef-client-wrapper'
+PATTERN='GECOSCMD'
 FILE=/etc/sudoers
 TMPFILE=/etc/sudoers.new
 

@@ -1,10 +1,42 @@
-#!/bin/sh
+#!/bin/bash
 # Add permissions for all users to run a chef-client
 
-LINE='ALL ALL=NOPASSWD: /usr/bin/gecos-chef-client-wrapper'
 FILE=/etc/sudoers
 
-grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE" 
+# Remove old (insecure) sudoers configuration line (if exists)
+OLD_LINE='ALL ALL=NOPASSWD: /usr/bin/gecos-chef-client-wrapper'
+grep -q "$OLD_LINE" "$FILE" && sed -i "\|$OLD_LINE|d" "$FILE"
+
+# Add new (more secure) sudoers configuration lines (if necessary)
+LINES[0]='Cmnd_Alias      GECOSCMD = /usr/bin/gecos-chef-client-wrapper'
+LINES[1]='Defaults!GECOSCMD   env_reset'
+LINES[2]='ALL ALL=NOPASSWD: GECOSCMD'
+
+PREVIOUS_LINE=''
+for ((i=0; i<3; i++)); do
+        LINE=${LINES[$i]}
+        if [ "$PREVIOUS_LINE" == "" ]
+	then
+		# Add the first line at the end of the file (if necessary)
+		grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
+	else
+
+		# Add the other lines after the previous lines  (if necessary)
+		grep -A1 "$PREVIOUS_LINE" "$FILE" | grep "$LINE" > /dev/null
+		if [ $? -ne 0 ]
+		then
+			# The line doesn't exists of doesn't follow the previous line
+			sed -i "\|$LINE|d" "$FILE"
+			sed -i "\|$PREVIOUS_LINE|a $LINE" "$FILE"
+		fi
+
+	fi
+
+	PREVIOUS_LINE=$LINE
+done
+
+
+
 
 # Set the services to start at boot
 systemctl enable gecos-snitch-service.service

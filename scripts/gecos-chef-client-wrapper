@@ -14,8 +14,9 @@ import random
 import re
 import datetime
 
-# Logs data files other than Chef client logs
-OTHER_LOGS_DATA_FILES = ['/var/log/automatic-updates.log', '/var/log/automatic-updates.err']
+# Log data files other than Chef client logs
+OTHER_LOG_DATA_FILES = ['/var/log/automatic-updates.log', '/var/log/automatic-updates.err']
+
 
 
 if __name__ == '__main__':
@@ -49,6 +50,19 @@ if __name__ == '__main__':
     gcc_flag_json = json.loads(content)
     url = gcc_flag_json['uri_gcc']
     node_id = gcc_flag_json['gcc_nodename']
+
+# GECOS Agent and Chef Client Autoupdate
+    new_version_available=subprocess.check_output(["aptitude","search","?and(?upgradable,?exact-name(gecos-agent))"])
+    if new_version_available:
+        fp.write("New GECOS Agent version available. Upgrading.\n")
+        subprocess.call(["apt","install","gecos-agent"]) 
+    
+    new_version_available=subprocess.check_output(["aptitude","search","?and(?upgradable,?exact-name(chef))"])
+    if new_version_available:
+        fp.write("New Chef Client version available. Upgrading before client execution.\n")
+        subprocess.call(["apt","install","chef"]) 
+
+
     fp.write("Connecting to GECOS Control Center api\n")
     try:
         # Reserve Chef node
@@ -106,7 +120,7 @@ if __name__ == '__main__':
             logs_data['files']['chef-client.log'] = chef_client_output
             
             # Read other logs data files
-            for f in OTHER_LOGS_DATA_FILES:
+            for f in OTHER_LOG_DATA_FILES:
                 if os.path.isfile(f) and os.access(f, os.R_OK):
                     with open(f, 'r') as logfile:
                         data=logfile.read()
@@ -132,8 +146,16 @@ if __name__ == '__main__':
                 fp.write("Error sending log data to GECOS Control Center\n")
             
         fp.close()
-        sys.exit(returnval)
+
+# Restarting agent if flag file (created in a chef recipe) exists
+        if os.path.isfile("/tmp/gecos-agent-force-restart.tmp"):
+            os.remove("/tmp/gecos-agent-force-restart.tmp")
+            python = sys.executable
+            os.execl(python, python, *sys.argv)
+        else:
+            sys.exit(returnval)
     else:
         fp.write("Error talking with GECOS Control Center\n")
         fp.close()
         sys.exit(1)
+
