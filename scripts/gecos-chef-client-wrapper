@@ -62,6 +62,34 @@ if __name__ == '__main__':
         fp.write("New Chef Client version available. Upgrading before client execution.\n")
         subprocess.call(["apt","install","chef"]) 
 
+# GEMs installation
+    fp.write("Checking installed gems\n")
+    required_gems = ['json', 'rest-client', 'activesupport', 'netaddr']
+    if os.path.isfile("/opt/chef/embedded/bin/gem"):
+        # Embedded
+        gembin = "/opt/chef/embedded/bin/gem"
+        gemfile = "/opt/chef/embedded/etc/gemrc"
+        os.mkdir("/opt/chef/embedded/etc/", 0755)
+    else:
+        gembin ="/usr/bin/gem"
+        gemfile = "/etc/gemrc"
+
+    for gem_name in required_gems:
+        regex = "^" + gem_name + "$"
+        # Checking if gem installed
+        retcode = subprocess.call([
+            gembin, "list", "-i", regex, "--config-file", gemfile])
+
+        if retcode: # retcode != 0, then gem not installed
+            # Installing gem
+            retval = subprocess.call([
+                gembin, "install", gem_name, "--config-file", gemfile])
+
+            if retval: # retval != 0
+                fp.write("Error installing gem: %s\n" % gem_name)
+            else:
+                fp.write("gem installed: %s\n" % gem_name)
+
 
     fp.write("Connecting to GECOS Control Center api\n")
     try:
