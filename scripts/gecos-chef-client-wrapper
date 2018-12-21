@@ -13,6 +13,7 @@ import time
 import random
 import re
 import datetime
+import shutil
 
 # Log data files other than Chef client logs
 OTHER_LOG_DATA_FILES = ['/var/log/automatic-updates.log', '/var/log/automatic-updates.err']
@@ -65,14 +66,17 @@ if __name__ == '__main__':
 # GEMs installation
     fp.write("Checking installed gems\n")
     required_gems = ['json', 'rest-client', 'activesupport', 'netaddr']
-    if os.path.isfile("/opt/chef/embedded/bin/gem"):
+    if os.path.isfile("/opt/chef/embedded/bin/gem") and not os.path.isfile("/opt/chef/embedded/etc/gemrc"):
         # Embedded
         gembin = "/opt/chef/embedded/bin/gem"
         gemfile = "/opt/chef/embedded/etc/gemrc"
-        os.mkdir("/opt/chef/embedded/etc/", 0755)
-    else:
-        gembin ="/usr/bin/gem"
-        gemfile = "/etc/gemrc"
+        try:
+            os.mkdir("/opt/chef/embedded/etc/", 0755)
+            shutil.copyfile("/etc/gemrc", gemfile)
+        except OSError:
+            pass # Already directory exists
+        except IOError:
+            pass # Not /etc/gemrc
 
     for gem_name in required_gems:
         regex = "^" + gem_name + "$"
@@ -89,7 +93,6 @@ if __name__ == '__main__':
                 fp.write("Error installing gem: %s\n" % gem_name)
             else:
                 fp.write("gem installed: %s\n" % gem_name)
-
 
     fp.write("Connecting to GECOS Control Center api\n")
     try:
