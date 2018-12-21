@@ -65,11 +65,17 @@ if __name__ == '__main__':
 
 # GEMs installation
     fp.write("Checking installed gems\n")
+    # Required gems
     required_gems = ['json', 'rest-client', 'activesupport', 'netaddr']
+    # Defaults
+    gembin = "/usr/bin/gem"
+    gemfile = "/etc/gemrc"
+
     if os.path.isfile("/opt/chef/embedded/bin/gem") and not os.path.isfile("/opt/chef/embedded/etc/gemrc"):
         # Embedded
         gembin = "/opt/chef/embedded/bin/gem"
         gemfile = "/opt/chef/embedded/etc/gemrc"
+
         try:
             os.mkdir("/opt/chef/embedded/etc/", 0755)
             shutil.copyfile("/etc/gemrc", gemfile)
@@ -78,21 +84,22 @@ if __name__ == '__main__':
         except IOError:
             pass # Not /etc/gemrc
 
+    installed_gems = subprocess.check_output([
+            gembin, "list", "--no-versions", "--config-file", gemfile]).split('\n')
+
     for gem_name in required_gems:
-        regex = "^" + gem_name + "$"
         # Checking if gem installed
-        retcode = subprocess.call([
-            gembin, "list", "-i", regex, "--config-file", gemfile])
+        if gem_name in installed_gems:
+            continue
 
-        if retcode: # retcode != 0, then gem not installed
-            # Installing gem
-            retval = subprocess.call([
-                gembin, "install", gem_name, "--config-file", gemfile])
+        # Installing gem
+        retval = subprocess.call([
+            gembin, "install", gem_name, "--config-file", gemfile])
 
-            if retval: # retval != 0
-                fp.write("Error installing gem: %s\n" % gem_name)
-            else:
-                fp.write("gem installed: %s\n" % gem_name)
+        if retval: # retval != 0
+            fp.write("Error installing gem: %s\n" % gem_name)
+        else:
+            fp.write("gem installed: %s\n" % gem_name)
 
     fp.write("Connecting to GECOS Control Center api\n")
     try:
