@@ -1,3 +1,9 @@
+gecos-agent (1.4-5) xenial; urgency=medium
+
+  * Installing gems
+
+ -- Alfonso de Cala <alfem@SDTPC302>  Wed, 27 Dec 2018 12:35:08 +0100
+
 gecos-agent (1.4-4) xenial; urgency=medium
 
   * Fix wrong python syntax
