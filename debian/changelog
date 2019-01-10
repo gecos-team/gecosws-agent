@@ -1,3 +1,9 @@
+gecos-agent (1.4-6) xenial; urgency=medium
+
+  * Hotfix: IndexError exception raised by cron job
+
+ -- Alfonso de Cala <alfem@SDTPC302>  Thu, 10 Jan 2019 12:35:08 +0100
+
 gecos-agent (1.4-5) xenial; urgency=medium
 
   * Installing gems
