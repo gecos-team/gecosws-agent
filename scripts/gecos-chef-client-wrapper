@@ -71,18 +71,19 @@ if __name__ == '__main__':
     gembin = "/usr/bin/gem"
     gemfile = "/etc/gemrc"
 
-    if os.path.isfile("/opt/chef/embedded/bin/gem") and not os.path.isfile("/opt/chef/embedded/etc/gemrc"):
+    if os.path.isfile("/opt/chef/embedded/bin/gem"):
         # Embedded
         gembin = "/opt/chef/embedded/bin/gem"
-        gemfile = "/opt/chef/embedded/etc/gemrc"
+        if not os.path.isfile("/opt/chef/embedded/etc/gemrc"):
+            gemfile = "/opt/chef/embedded/etc/gemrc"
 
-        try:
-            os.mkdir("/opt/chef/embedded/etc/", 0755)
-            shutil.copyfile("/etc/gemrc", gemfile)
-        except OSError:
-            pass # Already directory exists
-        except IOError:
-            pass # Not /etc/gemrc
+            try:
+                os.mkdir("/opt/chef/embedded/etc/", 0755)
+                shutil.copyfile("/etc/gemrc", gemfile)
+            except OSError:
+                pass # Already directory exists
+            except IOError:
+                pass # Not /etc/gemrc
 
     installed_gems = subprocess.check_output([
             gembin, "list", "--no-versions", "--config-file", gemfile]).split('\n')
