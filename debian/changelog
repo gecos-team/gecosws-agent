@@ -1,3 +1,9 @@
+gecos-agent (1.5-2gecos1) xenial; urgency=medium
+
+  * Revering package name change
+
+ -- Alfonso de Cala <alfonso.cala@juntadeandalucia.es>  Mon, 18 Mar 2019 12:00:00 +0100
+
 gecosws-agent (1.5-1gecos1) bionic; urgency=medium
 
   * Fix: aptitude returned a non-zero code. try-except block.
