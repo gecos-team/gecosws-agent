@@ -13,6 +13,7 @@ import time
 import random
 import re
 import datetime
+import shutil
 
 # Log data files other than Chef client logs
 OTHER_LOG_DATA_FILES = ['/var/log/automatic-updates.log', '/var/log/automatic-updates.err']
