@@ -8,5 +8,3 @@ TMPFILE=/etc/sudoers.new
 grep -v $PATTERN $FILE > $TMPFILE
 mv $TMPFILE $FILE
 
-systemctl disable gecos-snitch-service.service
-systemctl disable gecos-first-login.service
