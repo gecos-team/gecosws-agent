@@ -46,5 +46,8 @@ systemctl enable gecos-first-login.service
 if [ -f /run/systemd/generator.late/chef-client.service ]
 then
     # Disable chef client service
+    echo "Disable chef client service"
     systemctl disable chef-client.service
+    /lib/systemd/systemd-sysv-install disable chef-client
 fi
+

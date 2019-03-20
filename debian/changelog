@@ -1,28 +1,17 @@
-gecos-agent (1.4-7) xenial; urgency=medium
+gecosws-agent (1.5-1gecos1) bionic; urgency=medium
 
-  * Hotfix: Previous chef version with /opt/chef/embedded/etc/gemrc installed
+  * Fix: aptitude returned a non-zero code. try-except block.
+  * GEMs installation
 
- -- Alfonso de Cala <alfonso.cala@juntadeandalucia.es>  Thu, 24 Jan 2019 10:15:08 +0100
+ -- Alfonso de Cala <alfonso.cala@juntadeandalucia.es>  Mon, 18 Mar 2019 11:00:00 +0100
 
-gecos-agent (1.4-6) xenial; urgency=medium
+gecosws-agent (1.5gecos1) xenial; urgency=medium
 
-  * Hotfix: IndexError exception raised by cron job
+  * Change name and version format
 
- -- Alfonso de Cala <alfem@SDTPC302>  Thu, 10 Jan 2019 12:35:08 +0100
+ -- Alfonso de Cala <alfem@SDTPC302>  Tue, 4 Dec 2018 09:00:00 +0100
 
-gecos-agent (1.4-5) xenial; urgency=medium
-
-  * Installing gems
-
- -- Alfonso de Cala <alfem@SDTPC302>  Wed, 27 Dec 2018 12:35:08 +0100
-
-gecos-agent (1.4-4) xenial; urgency=medium
-
-  * Fix wrong python syntax
-
- -- Alfonso de Cala <alfem@SDTPC302>  Wed, 28 Nov 2018 10:05:08 +0100
-
-gecos-agent (1.4-3) xenial; urgency=medium
+gecos-agent (1.4-3ubuntu1) xenial; urgency=medium
 
   * Fix typo
 

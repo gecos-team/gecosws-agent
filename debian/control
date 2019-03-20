@@ -1,15 +1,15 @@
-Source: gecos-agent
+Source: gecosws-agent
 Maintainer: Alfonso de Cala <alfonso.cala@juntadeandalucia.es>
 Section: python
 Priority: optional
 Build-Depends: python (>= 2.6.6-3), debhelper (>= 7.4.3)
 Standards-Version: 3.9.5
 
-Package: gecos-agent
+Package: gecosws-agent
 Architecture: all
-Depends: python (>= 2.6.6-3), python-notify, chef, python-dbus, aptitude
-Breaks: gecosws-firstart, gecosws-chef-snitch, gecosws-chef-notifier-cinnamon
-Replaces: gecosws-firstart, gecosws-chef-snitch, gecosws-chef-notifier-cinnamon
+Depends: python (>= 2.6.6-3), python-notify, chef, python-dbus, aptitude, gir1.2-webkit-3.0
+Breaks: gecos-agent
+Replaces: gecos-agent
 Description: GECOS Agent for workstations
  This package contains boot and login scripts, daemons and systray apps
  to allow remote control and configuring from GECOS Control Center
