@@ -1,3 +1,10 @@
+gecosws-agent (1.5-1gecos1) bionic; urgency=medium
+
+  * Fix: aptitude returned a non-zero code. try-except block.
+  * GEMs installation
+
+ -- Alfonso de Cala <alfonso.cala@juntadeandalucia.es>  Mon, 18 Mar 2019 11:00:00 +0100
+
 gecosws-agent (1.5gecos1) xenial; urgency=medium
 
   * Change name and version format
