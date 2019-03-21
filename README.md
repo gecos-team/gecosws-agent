@@ -1,10 +1,12 @@
-#GECOS Agent 
+# GECOS Agent 
 
 GECOS Agent is a piece of GECOS architecture. Installed onto a GECOS compatible distribution,
 makes it manageable from a remote GECOS Control Center.
 
 Version 2 substitutes a complex network of packages, configuration files and recipes with 
 a simple agent+notification app all in one package
+
+**ATTENTION**: for GECOS v2 and v3, please use *gecos-agent* repository and package names. From v4 an on, use *gecosws-agent*.
 
 ## COMPONENTS
 
