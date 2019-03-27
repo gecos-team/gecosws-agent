@@ -70,9 +70,9 @@ class ChefSnitchSystray:
 
     def __trigger_update(self, data):
         if (os.path.exists("/usr/bin/gecos-chef-client-wrapper")):
-            subprocess.Popen(["gksudo", "/usr/bin/gecos-chef-client-wrapper"])
+            subprocess.Popen(["sudo", "/usr/bin/gecos-chef-client-wrapper"])
         else:
-            subprocess.Popen(["gksudo", "/usr/bin/chef-client"])
+            subprocess.Popen(["sudo", "/usr/bin/chef-client"])
 
     def on_activate(self, icon):
         event = gtk.get_current_event()
