@@ -39,3 +39,18 @@ You can use this setup to generate a source distribution gz (using python setup.
 
 Or just launch a dpkg-buildpackage and use the .deb created in the parent directory.
  
+
+## WINDOWS BUILDING
+
+To build the GECOS Agent under Windows you will need the 32 bits versions of:
+* Python 2.7 for Windows with the following modules:
+* Py2exe: http://www.py2exe.org (py2exe-X.X.X.win32-py2.7.exe)
+* wxPython 3.0.2 (AKA Classic): https://sourceforge.net/projects/wxpython/files/wxPython/3.0.2.0/
+* Microsoft Visual C++ 2008 SP 1 redistributable package (https://www.microsoft.com/en-sa/download/details.aspx?id=5582)
+
+The building process is:
+```
+python setup.py
+```
+
+
