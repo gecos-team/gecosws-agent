@@ -68,13 +68,12 @@ if sys.platform == 'win32':
     
     # Console applications
     setup_args['console'] = [
-        Target('gecosws-chef-snitch-client', 'Chef snitch client'),
+        Target('scripts/gecos-snitch-client', 'GECOS snitch client'),
     ]
     
     # Windows applications
     setup_args['windows'] = [
-        Target('gecos-notifier', 'GECOS notifier'),
-        Target('gecos-snitch-client', 'GECOS snitch client'),
+        Target('scripts/gecos-notifier', 'GECOS notifier'),
     ]
     setup_args['options'] = {'py2exe': {
         'dll_excludes': ['w9xpopen.exe'], 
@@ -117,8 +116,6 @@ if __name__ == '__main__':
     if os.path.exists('dist'):
         if os.path.exists('dist\\media'):
             shutil.rmtree('dist\\media')
-        shutil.copytree('media', 'dist\\media')
-        if os.path.exists('dist\\data'):
-            shutil.rmtree('dist\\data')
-        shutil.copytree('data', 'dist\\data')
+        shutil.copytree('data\\media', 'dist\\media')
+
 
