@@ -56,6 +56,10 @@ TRAY_RUNNING_ICON = 'media/emblem-synchronizing-symbolic_32x32.png'
 if CURRENT_OS == OS_LINUX:
     TRAY_STOPPED_ICON = '/usr/share/gecos-first-login/' + TRAY_STOPPED_ICON
     TRAY_RUNNING_ICON = '/usr/share/gecos-first-login/' + TRAY_RUNNING_ICON
+elif CURRENT_OS == OS_WINDOWS:
+    TRAY_STOPPED_ICON = os.path.join(os.path.dirname(sys.argv[0]), TRAY_STOPPED_ICON)
+    TRAY_RUNNING_ICON = os.path.join(os.path.dirname(sys.argv[0]), TRAY_RUNNING_ICON)
+
 
 ''' 
     Localized messages
@@ -264,8 +268,8 @@ class TaskBarIcon(wx.TaskBarIcon):
             file not found error.
             '''
             logging.debug('Launch Chef client update')
-            cmd = os.path.join(os.environ['SystemRoot'], 'System32', 'schtasks.exe')
-            process = subprocess.Popen([cmd, "/Run", "/tn", "chef-client-wrapper"], shell=True, stdout=subprocess.PIPE,
+            cmd = os.path.join(os.environ['SystemRoot'], 'System32', 'eventcreate.exe')
+            process = subprocess.Popen([cmd, "/ID", "777", "/L", "APPLICATION", "/T", "INFORMATION", "/SO", "GecosNotifier", "/D", "Initiate"], shell=True, stdout=subprocess.PIPE,
                                        stderr=subprocess.PIPE)
 
             stdout, stderr = process.communicate()
