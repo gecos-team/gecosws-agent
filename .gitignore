@@ -21,6 +21,13 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+debian/debhelper-build-stamp
+debian/files
+debian/gecosws-agent.postinst.debhelper
+debian/gecosws-agent.prerm.debhelper
+debian/gecosws-agent.substvars
+debian/gecosws-agent/
+
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

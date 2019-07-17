@@ -1,0 +1,344 @@
+#! /usr/bin/python
+
+# Copyright (C) 2004-2006 Red Hat Inc. <http://www.redhat.com/>
+# Copyright (C) 2005-2007 Collabora Ltd. <http://www.collabora.co.uk/>
+# Copyright (C) 2014 Junta de Andalucia. <http://www.juntadeandalucia.es/>
+#
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of this software and associated documentation
+# files (the "Software"), to deal in the Software without
+# restriction, including without limitation the rights to use, copy,
+# modify, merge, publish, distribute, sublicense, and/or sell copies
+# of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+# WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+# DEALINGS IN THE SOFTWARE.
+
+import logging
+import platform
+import locale
+import wx
+import BaseHTTPServer
+import threading
+import urllib
+import sys
+import wx.lib.newevent
+import subprocess
+import os
+import traceback
+
+global CONF, LANG, ENCODING, CURRENT_OS, taskbaricon
+logging.basicConfig(level=logging.DEBUG)
+CURRENT_OS = platform.system()
+
+'''
+    Messages and static data are defined here,
+'''
+STATUS_RUNNING = 'RUNNING'
+STATUS_STOPPED = 'STOPPED'
+OS_LINUX = 'Linux'
+OS_WINDOWS = 'Windows'
+NOTIFIER_SERVICE_ADDRESS = 'localhost'
+NOTIFIER_SERVICE_PORT_NUMBER = 63005
+TRAY_STOPPED_ICON = 'media/emblem-system-symbolic_32x32.png'
+TRAY_RUNNING_ICON = 'media/emblem-synchronizing-symbolic_32x32.png'
+
+if CURRENT_OS == OS_LINUX:
+    TRAY_STOPPED_ICON = '/usr/share/gecos-first-login/' + TRAY_STOPPED_ICON
+    TRAY_RUNNING_ICON = '/usr/share/gecos-first-login/' + TRAY_RUNNING_ICON
+
+''' 
+    Localized messages
+'''
+TRAY_STOPPED_TOOLTIP = {}
+TRAY_STOPPED_MESSAGE = {}
+TRAY_RUNNING_TOOLTIP = {}
+TRAY_RUNNING_MESSAGE = {}
+TRAY_BALLOON_TITLE = {}
+MENUITEM_UPDATE = {}
+MENUITEM_EXIT = {}
+
+''' 
+    Functions
+'''
+
+
+def defineMessagesAndLocale():
+    '''  English messages '''
+    TRAY_STOPPED_TOOLTIP['en'] = 'GECOS is stopped'
+    TRAY_STOPPED_MESSAGE['en'] = 'GECOS syncronization finished'
+    TRAY_RUNNING_TOOLTIP['en'] = 'GECOS is running'
+    TRAY_RUNNING_MESSAGE['en'] = 'GECOS syncronization started'
+    TRAY_BALLOON_TITLE['en'] = 'GECOS Control Center'
+    MENUITEM_UPDATE['en'] = 'Update'
+
+    ''' Spanish messages '''
+    TRAY_STOPPED_TOOLTIP['es'] = 'GECOS esta parado'
+    TRAY_STOPPED_MESSAGE['es'] = 'La sincronizacion GECOS ha terminado'
+    TRAY_RUNNING_TOOLTIP['es'] = 'GECOS esta trabajando'
+    TRAY_RUNNING_MESSAGE['es'] = 'La sincronizacion GECOS ha comenzado'
+    TRAY_BALLOON_TITLE['es'] = 'Centro de Control GECOS'
+    MENUITEM_UPDATE['es'] = 'Actualizar'
+
+    getLocale()
+
+
+def getLocale():
+    global LANG, ENCODING
+
+    defaultlocale = locale.getdefaultlocale()
+    logging.debug('Locale: %s' % (str(defaultlocale)))
+    ENCODING = locale.getdefaultlocale()[1]
+
+    if defaultlocale[0] == 'es_ES':
+        LANG = 'es'
+        logging.debug('Spanish language detected: LANG = %s, ENCODING = %s' % (LANG, ENCODING))
+    else:
+        LANG = 'en'
+        logging.debug('English language detected: LANG = %s, ENCODING = %s' % (LANG, ENCODING))
+
+
+def generate_html(title, code):
+    return "<html><head><title>" + title + "</title></head><body>" + code + "</body></html>"
+
+
+def show_notification(msg):
+    wx.NotificationMessage(TRAY_BALLOON_TITLE[LANG], msg).Show()
+
+
+def create_menu_item(menu, label, func):
+    item = wx.MenuItem(menu, -1, label)
+    menu.Bind(wx.EVT_MENU, func, id=item.GetId())
+    menu.AppendItem(item)
+    return item
+
+
+def notifierServiceThread():
+    global httpd
+    try:
+        server_class = BaseHTTPServer.HTTPServer
+        httpd = server_class((NOTIFIER_SERVICE_ADDRESS, NOTIFIER_SERVICE_PORT_NUMBER), NotifierServiceHandler)
+        try:
+            httpd.serve_forever()
+        except Exception as e:
+            pass
+        httpd.server_close()
+    except Exception as e:
+        logging.error('Error trying to run the HTTP server: %s' % (e))
+        logging.error(traceback.format_exc())
+    return
+
+
+'''
+    Class definitions
+'''
+
+
+class NotifierServiceHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+    def do_HEAD(s):
+        s.send_response(200)
+        s.send_header("Content-type", "text/html")
+        s.end_headers()
+
+    def do_GET(s):
+        global current_message
+        global current_status
+
+        if s.client_address[0] != '127.0.0.1':
+            s.send_response(401)
+            s.end_headers();
+            s.wfile.write("");
+            return False
+
+        """Respond to a GET request."""
+        s.send_response(200)
+        s.send_header("Content-type", "text/html")
+        s.end_headers()
+
+        logging.debug('GET %s' % (s.path))
+        if s.path == '/stop':
+            # Post the STOP event
+            evt = ChefStopEvent()
+            wx.PostEvent(taskbaricon, evt)
+            s.wfile.write(generate_html("STOP Command", "<p>Received a STOP command!</p>"))
+
+        elif s.path == '/start':
+            # Post the START event
+            evt = ChefStartEvent()
+            wx.PostEvent(taskbaricon, evt)
+            s.wfile.write(generate_html("START command", "<p>Received a START command!</p>"))
+
+        elif s.path == '/exit':
+            s.wfile.write(generate_html("EXIT command", "<p>Received an EXIT command!</p>"));
+            # Post the EXIT event
+            evt = NotifierExitEvent()
+            wx.PostEvent(taskbaricon, evt)
+
+        elif s.path == '/get-active':
+            # Get current status
+            s.wfile.write("%s" % (current_status))
+
+        elif s.path == '/get-message':
+            # Get current message
+            s.wfile.write("%s" % (current_message))
+
+        elif s.path.startswith('/message/'):
+            # Sets the current message
+            message = urllib.unquote(s.path[len('/message/'):])
+
+            logging.debug('Message changed: %s' % (message))
+            s.wfile.write(generate_html("MESSAGE command", "<p>Received a MESSAGE command: %s</p>" % (message)))
+            current_message = message
+            show_notification(message)
+        else:
+            s.wfile.write(generate_html("Unknown command", "<p>You sent an unknown command: %s</p>" % s.path))
+
+
+'''
+Needed for windows systems, on Linux there's no effect, but without the frame
+when the application exits gracefully Windows will show a `This app stopped working` error.
+'''
+
+
+class App(wx.App):
+   def OnInit(self):
+       wx.Frame.__init__(self, parent, -1, title, size = (1, 1),
+           style=wx.FRAME_NO_TASKBAR|wx.NO_FULL_REPAINT_ON_RESIZE)
+       # self.SetTopWindow(wx.Frame(None, -1))
+       frame.Show(False)
+       return True
+
+class TaskBarIcon(wx.TaskBarIcon):
+    def __init__(self):
+        global current_status
+        super(TaskBarIcon, self).__init__()
+
+        logging.debug('Initialization')
+        self.base_path = os.path.dirname(os.path.realpath(sys.argv[0]))
+        self.set_icon(TRAY_STOPPED_ICON, TRAY_STOPPED_TOOLTIP[LANG])
+        self.Bind(wx.EVT_TASKBAR_LEFT_DOWN, self.on_left_down)
+        self.Bind(EVT_CHEF_START_EVENT, self.on_run_signal)
+        self.Bind(EVT_CHEF_STOP_EVENT, self.on_stop_signal)
+        self.Bind(EVT_NOTIFIER_EXIT_EVENT, self.on_exit_signal)
+
+        current_status = STATUS_STOPPED
+
+    def CreatePopupMenu(self):
+        menu = wx.Menu()
+        create_menu_item(menu, MENUITEM_UPDATE[LANG], self.on_update)
+        return menu
+
+    def set_icon(self, path, tooltip):
+        icon = wx.Icon(path)
+        self.SetIcon(icon, tooltip)
+        logging.debug('ICON: %s' % (path))
+
+    def on_exit(self, event):
+        sys.exit(0)
+
+    def on_left_down(self, event):
+        pass
+
+    def on_update(self, event):
+        if current_status == STATUS_RUNNING:
+            return False
+
+        if CURRENT_OS == OS_LINUX:
+            if (os.path.exists("/usr/bin/gecos-chef-client-wrapper")):
+                subprocess.Popen(["sudo", "/usr/bin/gecos-chef-client-wrapper"])
+            else:
+                subprocess.Popen(["sudo", "/usr/bin/chef-client"])
+        elif CURRENT_OS == OS_WINDOWS:
+            '''
+            Scheduled task must exists or the system will report a 
+            file not found error.
+            '''
+            logging.debug('Launch Chef client update')
+            cmd = os.path.join(os.environ['SystemRoot'], 'System32', 'schtasks.exe')
+            process = subprocess.Popen([cmd, "/Run", "/tn", "chef-client-wrapper"], shell=True, stdout=subprocess.PIPE,
+                                       stderr=subprocess.PIPE)
+
+            stdout, stderr = process.communicate()
+            logging.debug('stdout:' + str(stdout) + '\n')
+            logging.error('stderr:' + str(stderr) + '\n')
+
+    def on_exit_signal(self, event):
+        logging.debug('EXIT signal detected')
+        httpd.server_close()
+        taskbaricon.Destroy()
+        sys.exit(0)
+
+    def on_run_signal(self, event):
+        global current_status
+
+        logging.debug('Chef Client RUN signal detected')
+        if current_status == STATUS_STOPPED:
+            show_notification(TRAY_RUNNING_MESSAGE[LANG])
+            self.set_icon(TRAY_RUNNING_ICON, TRAY_RUNNING_TOOLTIP[LANG])
+            current_status = STATUS_RUNNING
+
+    def on_stop_signal(self, event):
+        global current_status
+
+        logging.debug('Chef Client STOP signal detected')
+        if current_status == STATUS_RUNNING:
+            self.set_icon(TRAY_STOPPED_ICON, TRAY_STOPPED_TOOLTIP[LANG])
+            show_notification(TRAY_STOPPED_MESSAGE[LANG])
+            current_status = STATUS_STOPPED
+
+
+##
+# The task bar application
+#
+class TaskBarApp(wx.Frame):
+
+    ##
+    # \brief the constructor
+    #
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, -1, title, size = (1, 1),
+            style=wx.FRAME_NO_TASKBAR|wx.NO_FULL_REPAINT_ON_RESIZE)
+
+        self.Show(True)
+
+##
+# The main application wx.App class
+#
+class MyApp(wx.App):
+    def OnInit(self):
+        frame = TaskBarApp(None, -1, ' ')
+        frame.Center(wx.BOTH)
+        frame.Show(False)
+        return True
+
+
+if __name__ == '__main__':
+    defineMessagesAndLocale()
+
+    ChefStartEvent, EVT_CHEF_START_EVENT = wx.lib.newevent.NewEvent()
+    ChefStopEvent, EVT_CHEF_STOP_EVENT = wx.lib.newevent.NewEvent()
+    NotifierExitEvent, EVT_NOTIFIER_EXIT_EVENT = wx.lib.newevent.NewEvent()
+
+    current_status = STATUS_STOPPED
+    current_message = ''
+
+    # Start the notifierService
+    notifierService = threading.Thread(target=notifierServiceThread)
+    notifierService.start()
+    logging.debug("WS ready")
+
+
+    # Start the app
+    app = MyApp(0)
+    taskbaricon = TaskBarIcon()
+    app.MainLoop()

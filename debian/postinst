@@ -39,7 +39,6 @@ done
 
 
 # Set the services to start at boot
-systemctl enable gecos-snitch-service.service
 systemctl enable gecos-first-login.service
 
 
