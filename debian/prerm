@@ -1,5 +1,4 @@
 #!/bin/sh
 # Disable services
 
-systemctl disable gecos-snitch-service.service
 systemctl disable gecos-first-login.service

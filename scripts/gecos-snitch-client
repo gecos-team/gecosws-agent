@@ -23,67 +23,85 @@
 # DEALINGS IN THE SOFTWARE.
 
 import argparse
-import dbus
 import sys
-
+import platform
+import requests
 from traceback import print_exc
+import urllib
 
-DBUS_INTERFACE = 'org.gecos.snitch'
-DBUS_PATH = '/org/gecos/snitch'
+WS_ENDPOINT = 'http://localhost:63005'
 
-def dbus_operation(func):
-   def func_wrapper(*args, **kwargs):
-       try:
-           return func(*args, **kwargs)
-       except dbus.DBusException:
-            print_exc()
-            sys.exit(1)
-   return func_wrapper
 
 class ChefSnitchClient(object):
-    @dbus_operation
-    def __init__(self):
-        bus = dbus.SystemBus()
-        self.object = bus.get_object(DBUS_INTERFACE, DBUS_PATH)
-
-    @dbus_operation
     def get_active(self):
-        value = self.object.GetActive(dbus_interface=DBUS_INTERFACE)
-        return str(bool(value)).lower()
+        url = WS_ENDPOINT + '/get-active'
+        r = requests.get(url)
 
-    @dbus_operation
+        return r.content
+
     def get_message(self):
-        message = self.object.GetMessage(dbus_interface=DBUS_INTERFACE)
-        return message
+        url = WS_ENDPOINT + '/get-message'
+        r = requests.get(url);
 
-    @dbus_operation
-    def set_active(self, input_value):
-        value = eval(input_value.capitalize())
-        result = self.object.SetActive(value, dbus_interface=DBUS_INTERFACE)
-        return result
+        return r.content
 
-    @dbus_operation
+    def start(self):
+        url = WS_ENDPOINT + '/start'
+        r = requests.get(url)
+
+        if r.status_code == 200:
+            return True
+        return False
+
+    def stop(self):
+        url = WS_ENDPOINT + '/stop'
+        r = requests.get(url)
+
+        if r.status_code == 200:
+            return True
+        return False
+
+    def set_active(self):
+        pass
+
     def set_message(self, msg):
-        result = \
-            self.object.NotifyMessage(msg, dbus_interface=DBUS_INTERFACE)
-        return result
+        ret = False
+
+        if msg != None:
+            msg = urllib.quote(msg.decode('unicode_escape').encode('utf-8'))
+            url = WS_ENDPOINT + '/message/' + msg
+            r = requests.get(url)
+
+            if r.status_code == 200:
+                ret = True
+
+        return ret
+
+
+def printArguments(*args):  # just use "*" to collect all remaining arguments into a tuple
+    numargs = len(args)
+    print
+    "Number of arguments: %s<br />" % numargs
+    if numargs >= 2:
+        print
+        "Second argument is: %s<br />" % args[1]
+    for i, x in enumerate(args):
+        print
+        "Argument %d is: %s<br />" % (i, x)
+
 
 if __name__ == '__main__':
     app_description = 'GECOS Snitch client.'
 
     parser = argparse.ArgumentParser(prog='gecos-snitch-client', \
                                      description=app_description)
-
     parser.add_argument('--get-active', action='store_true', \
                         help='returns current status, either true or false')
-
     parser.add_argument('--get-message', action='store_true', \
                         help='returns latest message delivered')
-
     parser.add_argument('--set-active', \
                         help='set the current value of active', \
                         choices=['true', 'false'])
-
     parser.add_argument('--set-message', \
                         help='provide a new message (use double quotes)', \
                         type=str, dest='message')
@@ -97,11 +115,13 @@ if __name__ == '__main__':
     client = ChefSnitchClient()
 
     if args.get_active:
-        print client.get_active()
+        print(client.get_active())
     elif args.get_message:
-        print client.get_message()
+        print(client.get_message())
     elif args.set_active:
-        client.set_active(args.set_active)
+        if args.set_active == 'true':
+            client.start()
+        else:
+            client.stop()
     elif args.message:
         client.set_message(args.message)
-
