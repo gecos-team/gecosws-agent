@@ -45,24 +45,29 @@ class ChefSnitchClient(object):
 
         return r.content
 
-    def start(self):
-        url = WS_ENDPOINT + '/start'
+    def exit(self):
+        url = WS_ENDPOINT + '/exit'
         r = requests.get(url)
 
         if r.status_code == 200:
             return True
         return False
 
-    def stop(self):
-        url = WS_ENDPOINT + '/stop'
+    def set_active(self, input_value):
+        ret = False
+        value = eval(input_value.capitalize())
+        if value:
+            path = 'start'
+        else:
+            path = 'stop'
+
+        url = WS_ENDPOINT + '/' + path
         r = requests.get(url)
 
         if r.status_code == 200:
-            return True
-        return False
+            ret = True
 
-    def set_active(self):
-        pass
+        return ret
 
     def set_message(self, msg):
         ret = False
@@ -105,6 +110,8 @@ if __name__ == '__main__':
     parser.add_argument('--set-message', \
                         help='provide a new message (use double quotes)', \
                         type=str, dest='message')
+    parser.add_argument('--exit', action='store_true', \
+                                help='stops the GECOS notifier')
 
     args = parser.parse_args()
 
@@ -119,9 +126,8 @@ if __name__ == '__main__':
     elif args.get_message:
         print(client.get_message())
     elif args.set_active:
-        if args.set_active == 'true':
-            client.start()
-        else:
-            client.stop()
+        client.set_active(args.set_active)
     elif args.message:
         client.set_message(args.message)
+    elif args.exit:
+        client.exit()      
