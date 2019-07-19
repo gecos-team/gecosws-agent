@@ -37,7 +37,7 @@ import subprocess
 import os
 import traceback
 
-global CONF, LANG, ENCODING, CURRENT_OS, taskbaricon
+global CONF, LANG, ENCODING, CURRENT_OS, taskbaricon, app
 logging.basicConfig(level=logging.DEBUG)
 CURRENT_OS = platform.system()
 
@@ -280,7 +280,7 @@ class TaskBarIcon(wx.TaskBarIcon):
         logging.debug('EXIT signal detected')
         httpd.server_close()
         taskbaricon.Destroy()
-        sys.exit(0)
+        app.Destroy()
 
     def on_run_signal(self, event):
         global current_status
