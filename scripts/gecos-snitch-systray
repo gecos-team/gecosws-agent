@@ -31,7 +31,8 @@ import traceback
 import dbus
 import dbus.mainloop.glib
 
-import gobject
+from gi.repository import GObject
+from gi.repository import GLib
 import gtk
 
 import os
@@ -60,7 +61,7 @@ class ChefSnitchSystray:
                                      dbus_interface = DBUS_INTERFACE, \
                                      signal_name = "MessageNotified")
 
-        self.loop = gobject.MainLoop()
+        self.loop = GLib.MainLoop()
 
         pynotify.init("GECOS Snitch")
         self.update_status()
@@ -140,13 +141,13 @@ class ChefSnitchSystray:
 
     def is_active_has_changed_cb(self):
         is_active = self.get_is_active()
-        print ("The value of IsActive has changed to: %r" % (bool(is_active)))
+        print("The value of IsActive has changed to: %r" % (bool(is_active)))
 
         self.update_status()
 
     def message_notified_cb(self):
         message = self.get_message()
-        print ("A new message has been delivered: %s" % (message))
+        print("A new message has been delivered: %s" % (message))
         self.notify("GECOS notification", message)
 
     # Simple notifications

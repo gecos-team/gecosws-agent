@@ -21,5 +21,5 @@ __copyright__ = "Copyright (C) 2011, Junta de Andalucía <devmaster@guadalinex.o
 __license__ = "GPL-2"
 
 
-from DBusService import DBusService
-from DBusClient import DBusClient
+from .DBusService import DBusService
+from .DBusClient import DBusClient

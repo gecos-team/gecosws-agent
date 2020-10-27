@@ -45,7 +45,7 @@ class DBusService(dbus.service.Object):
 
     def __init__(self):
         self.log('Initializing DBus service...')
-        self.loop = GObject.MainLoop()
+        self.loop = GLib.MainLoop()
 
     def log(self, message, priority=syslog.LOG_INFO):
         syslog.syslog(priority, message)

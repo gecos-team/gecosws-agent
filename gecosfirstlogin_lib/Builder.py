@@ -220,7 +220,7 @@ def getmembers(object, predicate=None):
     for key in dir(object):
         try:
             value = getattr(object, key)
-        except AttributeError, RuntimeError:
+        except (AttributeError, RuntimeError):
             continue
         except Exception:
             continue

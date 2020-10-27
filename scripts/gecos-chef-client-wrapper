@@ -89,7 +89,7 @@ if __name__ == '__main__':
             gemfile = "/opt/chef/embedded/etc/gemrc"
 
             try:
-                os.mkdir("/opt/chef/embedded/etc/", 0755)
+                os.mkdir("/opt/chef/embedded/etc/", 0o755)
                 shutil.copyfile("/etc/gemrc", gemfile)
             except OSError:
                 pass # Already directory exists
@@ -138,7 +138,7 @@ if __name__ == '__main__':
                 if not line and process.poll() is not None:
                     break
                 if line:
-                    print line
+                    print(line)
 
             childstatus = process.poll()
 

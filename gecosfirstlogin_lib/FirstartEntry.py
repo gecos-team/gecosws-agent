@@ -1,7 +1,7 @@
 
 import os
 import types
-import config
+from . import config
 from xdg.IniFile import *
 
 class FirstartEntry(IniFile):

@@ -27,7 +27,8 @@
 import sys
 import traceback
 
-import gobject
+from gi.repository import GObject
+from gi.repository import GLib
 
 import dbus
 import dbus.mainloop.glib
@@ -45,11 +46,11 @@ def get_message():
 
 def is_active_has_changed_cb():
     is_active = get_is_active()
-    print ("The Value of IsActive has changed to: %r" % (bool(is_active)))
+    print("The Value of IsActive has changed to: %r" % (bool(is_active)))
 
 def message_notified_cb():
     message = get_message()
-    print ("A new message has been delivered: %s" % (message))
+    print("A new message has been delivered: %s" % (message))
 
 if __name__ == '__main__':
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
@@ -63,5 +64,5 @@ if __name__ == '__main__':
                             dbus_interface = DBUS_INTERFACE, \
                             signal_name = "MessageNotified")
 
-    loop = gobject.MainLoop()
+    loop = GLib.MainLoop()
     loop.run()

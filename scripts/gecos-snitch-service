@@ -24,7 +24,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import gobject
+from gi.repository import GObject
+from gi.repository import GLib
 
 import dbus
 import dbus.service
@@ -75,6 +76,6 @@ if __name__ == '__main__':
     name = dbus.service.BusName(DBUS_INTERFACE, system_bus)
     object = ChefSnitch(system_bus, DBUS_PATH)
 
-    mainloop = gobject.MainLoop()
-    print "GECOS Snitch Service is up and running ..."
+    mainloop = GLib.MainLoop()
+    print("GECOS Snitch Service is up and running ...")
     mainloop.run()
