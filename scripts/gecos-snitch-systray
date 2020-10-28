@@ -84,19 +84,20 @@ class ChefSnitchSystray:
 
         menu = Gtk.Menu()
 
-        update = Gtk.MenuItem("Update")
+        update = Gtk.MenuItem()
+        update.set_label('Update')
         update.show()
         menu.append(update)
         update.connect("activate", self.__trigger_update)
 
-        menu.popup(None, None, Gtk.status_icon_position_menu,
-                   event.button, int(event.get_time()), self.tray)
+        menu.popup(None, None, None, None, 0, int(event.get_time()))
 
     def make_menu(self, event_button, event_time):
         menu = Gtk.Menu()
 
         # show about dialog
-        about = Gtk.MenuItem("About")
+        about = Gtk.MenuItem()
+        about.set_label('About')
         about.show()
         menu.append(about)
         about.connect("activate", self.show_about_dialog)
@@ -108,8 +109,7 @@ class ChefSnitchSystray:
         #menu.append(quit)
         #quit.connect("activate", self.__loop_quit)
 
-        menu.popup(None, None, Gtk.status_icon_position_menu,
-                   event_button, event_time, self.tray)
+        menu.popup(None, None, None, None, 0, int(event_time.get_time()))
 
     def show_about_dialog(self, widget):
         about_dialog = Gtk.AboutDialog()
@@ -158,7 +158,7 @@ class ChefSnitchSystray:
     # If you want to add actions:
     # http://ubuntuforums.org/showthread.php?t=447613
     def notify(self, summary, body):
-        n = Notify.Notification.new(summary, body,)
+        n = Notify.Notification.new(summary, body)
         n.show()
 
 if __name__ == "__main__":
