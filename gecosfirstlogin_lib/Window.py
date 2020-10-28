@@ -21,6 +21,7 @@ __copyright__ = "Copyright (C) 2011, Junta de Andalucía <devmaster@guadalinex.o
 __license__ = "GPL-2"
 
 
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import GObject
 from . helpers import get_builder, show_uri, get_help_uri

@@ -25,6 +25,7 @@ __license__ = "GPL-2"
 import logging
 import os
 
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 from . config import get_data_file

@@ -25,6 +25,7 @@ __license__ = "GPL-2"
 
 from gi.repository import GObject  # pylint: disable=E0611
 
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import inspect
 import functools
