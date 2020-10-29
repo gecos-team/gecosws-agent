@@ -109,7 +109,7 @@ class ChefSnitchSystray:
         #menu.append(quit)
         #quit.connect("activate", self.__loop_quit)
 
-        menu.popup(None, None, None, None, 0, int(event_time.get_time()))
+        menu.popup(None, None, None, None, 0, int(event_time))
 
     def show_about_dialog(self, widget):
         about_dialog = Gtk.AboutDialog()
