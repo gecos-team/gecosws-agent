@@ -80,7 +80,7 @@ class DBusService(dbus.service.Object):
                 break
         #Run two chef-clients cause its necessary for GCC
         #TODO: Change this to only one execution
-        if tries<30:
+        if tries < 30:
             envs = os.environ
 #            envs['LANG'] = 'es_ES.UTF-8'
             cmd = 'gecos-chef-client-wrapper'
