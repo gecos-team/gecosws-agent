@@ -28,6 +28,12 @@ import os
 import gettext
 from gettext import gettext as _
 
+from gecosfirstlogin import dbusservice
+from gecosfirstlogin_lib.config import get_prefix
+
+PYTHON_VERSION = ".".join(map(str, sys.version_info[:2]))
+# Just in case folders have the third version number
+PYTHON_VERSION_FULL = ".".join(map(str, sys.version_info[:3]))
 
 # Add project root directory (enable symlink and trunk execution)
 PROJECT_ROOT_DIRECTORY = os.path.abspath(
@@ -42,7 +48,7 @@ if os.path.abspath(__file__).startswith('/opt'):
         sys.path.insert(0, opt_path)
 
 if (os.path.exists(os.path.join(PROJECT_ROOT_DIRECTORY, 'firstart'))
-    and PROJECT_ROOT_DIRECTORY not in sys.path):
+        and PROJECT_ROOT_DIRECTORY not in sys.path):
     python_path.insert(0, PROJECT_ROOT_DIRECTORY)
     sys.path.insert(0, PROJECT_ROOT_DIRECTORY)
 
@@ -54,21 +60,25 @@ def insert_paths(paths=[]):
             sys.path.insert(0, path)
 
 
+
 insert_paths([
-    '/usr/local/lib/python2.7/dist-packages',
-    '/usr/lib/python2.7/dist-packages',
-    '/usr/local/lib/python2.7/site-packages',
-    '/usr/lib/python2.7/site-packages',
-#    '/usr/local/share/pyshared',
-#    '/usr/share/pyshared'
+    '/usr/local/lib/python' + PYTHON_VERSION + '/dist-packages',
+    '/usr/lib/python' + PYTHON_VERSION + '/dist-packages',
+    '/usr/local/lib/python' + PYTHON_VERSION + '/site-packages',
+    '/usr/lib/python' + PYTHON_VERSION + '/site-packages',
+    '/usr/local/lib/python' + PYTHON_VERSION_FULL + '/dist-packages',
+    '/usr/lib/python' + PYTHON_VERSION_FULL + '/dist-packages',
+    '/usr/local/lib/python' + PYTHON_VERSION_FULL + '/site-packages',
+    '/usr/lib/python' + PYTHON_VERSION_FULL + '/site-packages',
+    #'/usr/local/share/pyshared',
+    #'/usr/share/pyshared'
 ])
 
 
 if python_path:
     os.putenv('PYTHONPATH', "%s:%s" % (os.getenv('PYTHONPATH', ''), ':'.join(python_path))) # for subprocesses
 
-import gecosfirstlogin
-from gecosfirstlogin_lib.config import get_prefix
+
 
 if get_prefix() == '/usr/local':
     gettext.bindtextdomain('firstart', '/usr/local/share/locale')
@@ -78,4 +88,4 @@ elif get_prefix() == '/usr':
 
 if __name__ == '__main__':
 
-    gecosfirstlogin.dbusservice()
+    dbusservice()
