@@ -21,8 +21,9 @@ __copyright__ = "Copyright (C) 2011, Junta de Andalucía <devmaster@guadalinex.o
 __license__ = "GPL-2"
 import threading
 import time
-import lsb_release
 import traceback
+import lsb_release
+
 class DbusThread(threading.Thread):
     def __init__(self, fwindow):
         self.fwindow = fwindow

@@ -1,8 +1,8 @@
-
 import os
 import types
+from xdg.IniFile import IniFile
 from . import config
-from xdg.IniFile import *
+
 
 class FirstartEntry(IniFile):
 

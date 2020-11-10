@@ -22,11 +22,11 @@ __license__ = "GPL-2"
 
 
 import os
-import dbus
-import syslog
-import lsb_release
-import traceback
 import time
+import syslog
+import traceback
+import dbus
+import lsb_release
 
 
 if 'Lite' in lsb_release.get_distro_information()['DESCRIPTION']:
@@ -41,7 +41,6 @@ if 'Lite' in lsb_release.get_distro_information()['DESCRIPTION']:
     SM_DBUS_EXIST_UNREGISTER_CLIENT_METHOD = False
     SM_DBUS_EXIST_INHIBIT_METHOD = False
     SM_DBUS_EXIST_UNINHIBIT_METHOD = False
-    
 else:
     # Use org.gnome.SessionManager interface
     # (Setenv, InitializationError, RegisterClient, UnregisterClient, Inhibit,
@@ -88,7 +87,6 @@ class SessionManager:
                 return True
         return False
 
-        
     def start(self):
         if self.state == 1:
             return
@@ -107,11 +105,11 @@ inside a gnome-session context.', syslog.LOG_ERR)
             time.sleep(1)
             ntries = ntries + 1
             exists = self.existServiceInSessionBus(SM_DBUS_SERVICE)
-        
+
         if not exists:
             self.log('DBUS session bus service %s not found!'%(SM_DBUS_SERVICE), syslog.LOG_ERR)
             return
-        
+
         self.sm_proxy = session_bus.get_object(SM_DBUS_SERVICE, SM_DBUS_OBJECT_PATH)
 
         try:
@@ -135,7 +133,7 @@ inside a gnome-session context.', syslog.LOG_ERR)
     def register_client(self):
         if not SM_DBUS_EXIST_REGISTER_CLIENT_METHOD:
             return
-        
+
         register_client = self.sm_proxy.get_dbus_method('RegisterClient', SM_DBUS_SERVICE)
         self.sm_client_id = register_client(self.sm_client_name, self.desktop_autostart_id)
         self.log('Client Id: ' + str(self.sm_client_id))
@@ -143,7 +141,7 @@ inside a gnome-session context.', syslog.LOG_ERR)
     def unregister_client(self):
         if not SM_DBUS_EXIST_UNREGISTER_CLIENT_METHOD:
             return
-        
+
         unregister_client = self.sm_proxy.get_dbus_method('UnregisterClient', SM_DBUS_SERVICE)
         unregister_client(self.sm_client_id)
 
@@ -159,7 +157,7 @@ inside a gnome-session context.', syslog.LOG_ERR)
     def inhibit(self):
         if not SM_DBUS_EXIST_INHIBIT_METHOD:
             return
-        
+
         if self.inhibit_cookie != None:
             return
         m_inhibit = self.sm_proxy.get_dbus_method('Inhibit', SM_DBUS_SERVICE)
@@ -172,10 +170,9 @@ inside a gnome-session context.', syslog.LOG_ERR)
     def uninhibit(self):
         if not SM_DBUS_EXIST_UNINHIBIT_METHOD:
             return
-        
+
         if self.inhibit_cookie == None:
             return
         m_uninhibit = self.sm_proxy.get_dbus_method('Uninhibit', SM_DBUS_SERVICE)
         m_uninhibit(self.inhibit_cookie)
         self.inhibit_cookie = None
-
