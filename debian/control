@@ -7,7 +7,7 @@ Standards-Version: 3.9.5
 
 Package: gecosws-agent
 Architecture: all
-Depends: python3, chef, python3-dbus, aptitude, gir1.2-webkit2-4.0, python3-gi
+Depends: python3, chef, python3-dbus, aptitude, gir1.2-webkit2-4.0, python3-gi, python3-xdg
 Description: GECOS Agent for workstations
  This package contains boot and login scripts, daemons and systray apps
  to allow remote control and configuring from GECOS Control Center
