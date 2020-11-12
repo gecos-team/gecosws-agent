@@ -23,7 +23,7 @@ __license__ = "GPL-2"
 
 import gettext
 
-from gecosfirstlogin import main
+import gecosfirstlogin
 from gecosfirstlogin_lib.config import get_prefix
 
 if get_prefix() == '/usr/local':
@@ -34,4 +34,4 @@ elif get_prefix() == '/usr':
 
 if __name__ == '__main__':
 
-    main()
+    gecosfirstlogin.main()
