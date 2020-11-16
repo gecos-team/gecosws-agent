@@ -1,3 +1,10 @@
+gecosws-agent (2.0-0gecos1) bionic; urgency=medium
+
+  * Code migration to Python 3
+  * Version change to 2.0-0
+
+ -- Abraham Macias <amacias@gruposolutia.com>  Mon, 16 Nov 2020 08:10:00 +0100
+
 gecosws-agent (1.5-4gecos1) bionic; urgency=medium
 
   * Back to gecosws-agent name just for bionic
