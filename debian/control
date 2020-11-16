@@ -2,7 +2,8 @@ Source: gecosws-agent
 Maintainer: Alfonso de Cala <alfonso.cala@juntadeandalucia.es>
 Section: python
 Priority: optional
-Build-Depends: python3, debhelper, dh-python, ${gecosws-agent:Depends}
+Build-Depends: python3, debhelper, dh-python
+Build-Depends: python3-dbus, aptitude, gir1.2-webkit2-4.0, python3-gi, python3-xdg, lsb-release
 Standards-Version: 3.9.5
 
 Package: gecosws-agent
