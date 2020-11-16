@@ -21,8 +21,9 @@ __copyright__ = "Copyright (C) 2011, Junta de Andalucía <devmaster@guadalinex.o
 __license__ = "GPL-2"
 import threading
 import time
-import lsb_release
 import traceback
+import lsb_release
+
 class DbusThread(threading.Thread):
     def __init__(self, fwindow):
         self.fwindow = fwindow
@@ -36,7 +37,7 @@ def chef_is_configured():
     import os
     # Don't execute this assistant if chef its not configured
     
-    return (os.path.exists('/etc/chef/client.rb') and (os.path.getsize('/etc/chef/client.rb') > 0L))
+    return (os.path.exists('/etc/chef/client.rb') and (os.path.getsize('/etc/chef/client.rb') > 0))
 
 
 def dbusservice():
@@ -45,7 +46,7 @@ def dbusservice():
         return
 
     import os
-    from dbus.DBusService import DBusService
+    from .dbus.DBusService import DBusService
 
     s = DBusService()
     s.start()
@@ -58,10 +59,10 @@ def main():
 
     import gi
     gi.require_version('Gtk', '3.0')
-    gi.require_version('WebKit', '3.0')
+    gi.require_version('WebKit2', '4.0')
     from gi.repository import Gtk
     from gecosfirstlogin_lib.FirstartEntry import FirstartEntry
-    from assistant.FirstartWindow import FirstartWindow
+    from .assistant.FirstartWindow import FirstartWindow
     import os
     if lsb_release.get_distro_information()['DESCRIPTION'] == 'Gecos V2 Lite':
         time.sleep(3)

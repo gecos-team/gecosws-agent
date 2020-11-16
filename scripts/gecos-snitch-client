@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 # Copyright (C) 2014 Junta de Andalucia. <http://www.juntadeandalucia.es/>
 #
@@ -97,9 +97,9 @@ if __name__ == '__main__':
     client = ChefSnitchClient()
 
     if args.get_active:
-        print client.get_active()
+        print(client.get_active())
     elif args.get_message:
-        print client.get_message()
+        print(client.get_message())
     elif args.set_active:
         client.set_active(args.set_active)
     elif args.message:

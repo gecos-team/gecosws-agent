@@ -20,7 +20,8 @@ __author__ = "Antonio Hernández <ahernandez@emergya.com>"
 __copyright__ = "Copyright (C) 2011, Junta de Andalucía <devmaster@guadalinex.org>"
 __license__ = "GPL-2"
 
-
+import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import GObject
 from . helpers import get_builder, show_uri, get_help_uri

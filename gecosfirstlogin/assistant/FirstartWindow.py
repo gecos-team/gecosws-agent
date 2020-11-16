@@ -20,13 +20,15 @@ __author__ = "Antonio Hernández <ahernandez@emergya.com>"
 __copyright__ = "Copyright (C) 2011, Junta de Andalucía <devmaster@guadalinex.org>"
 __license__ = "GPL-2"
 
-
+import gi
+gi.require_version('Gdk', '3.0')
 from gi.repository import Gdk
-from gi.repository import WebKit as webkit
+gi.require_version('WebKit2', '4.0')
+from gi.repository import WebKit2 as webkit
 from gecosfirstlogin_lib.Window import Window
 from gecosfirstlogin.dbus.DBusClient import DBusClient
 import gecosfirstlogin_lib.config as config
-from SessionManager import SessionManager
+from .SessionManager import SessionManager
 import time
 import math
 
@@ -150,14 +152,14 @@ class FirstartWindow(Window):
         i = 0
         while i < 10:
             i = i + 1
-            r = Gdk.keyboard_grab(w, False, 0L)
+            r = Gdk.keyboard_grab(w, False, 0)
             #print r
             if r == Gdk.GrabStatus.SUCCESS:
                 break
             time.sleep(1)
-        r = Gdk.pointer_grab(w, True, 0, w, None, 0L)
+        r = Gdk.pointer_grab(w, True, 0, w, None, 0)
         #print r
 
     def ungrab(self):
-        r = Gdk.keyboard_ungrab(0L)
-        r = Gdk.pointer_ungrab(0L)
+        r = Gdk.keyboard_ungrab(0)
+        r = Gdk.pointer_ungrab(0)

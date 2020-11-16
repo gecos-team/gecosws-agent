@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- Mode: Python; coding: utf-8; indent-tabs-mode: nil; tab-width: 4 -*-
 __author__ = "David Amian Valle <damian@emergya.com>"
 __copyright__ = "Copyright (C) 2014, Junta de Andalucía <gecos@guadalinex.org>"
@@ -37,7 +37,7 @@ if __name__ == '__main__':
     max_delay = 600
     lapse = 0
     my_pid = os.getpid()
-    search_string = "-cron-"
+    search_string = b'-cron-'
     parents_chain = subprocess.check_output(["/usr/bin/pstree", "-s",str(my_pid)])
     from_cron = re.search(search_string, parents_chain)
     if from_cron:
@@ -89,7 +89,7 @@ if __name__ == '__main__':
             gemfile = "/opt/chef/embedded/etc/gemrc"
 
             try:
-                os.mkdir("/opt/chef/embedded/etc/", 0755)
+                os.mkdir("/opt/chef/embedded/etc/", 0o755)
                 shutil.copyfile("/etc/gemrc", gemfile)
             except OSError:
                 pass # Already directory exists
@@ -97,7 +97,7 @@ if __name__ == '__main__':
                 pass # Not /etc/gemrc
 
     installed_gems = subprocess.check_output([
-            gembin, "list", "--no-versions", "--config-file", gemfile]).split('\n')
+            gembin, "list", "--no-versions", "--config-file", gemfile]).decode().split('\n')
 
     for gem_name in required_gems:
         # Checking if gem installed
@@ -133,12 +133,12 @@ if __name__ == '__main__':
             # Getting child process ouput to screen and into variable
             chef_client_output = ''
             while True:
-                line = process.stdout.readline()
+                line = process.stdout.readline().decode()
                 chef_client_output += line
                 if not line and process.poll() is not None:
                     break
                 if line:
-                    print line
+                    print(line)
 
             childstatus = process.poll()
 

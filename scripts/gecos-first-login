@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- Mode: Python; coding: utf-8; indent-tabs-mode: nil; tab-width: 4 -*-
 
 # This file is part of Guadalinex
@@ -21,13 +21,7 @@ __author__ = "Antonio Hernández <ahernandez@emergya.com>"
 __copyright__ = "Copyright (C) 2011, Junta de Andalucía <gecos@guadalinex.org>"
 __license__ = "GPL-2"
 
-
-import sys
-import os
-
 import gettext
-from gettext import gettext as _
-
 
 import gecosfirstlogin
 from gecosfirstlogin_lib.config import get_prefix

@@ -45,7 +45,7 @@ class DBusService(dbus.service.Object):
 
     def __init__(self):
         self.log('Initializing DBus service...')
-        self.loop = GObject.MainLoop()
+        self.loop = GLib.MainLoop()
 
     def log(self, message, priority=syslog.LOG_INFO):
         syslog.syslog(priority, message)
@@ -80,7 +80,7 @@ class DBusService(dbus.service.Object):
                 break
         #Run two chef-clients cause its necessary for GCC
         #TODO: Change this to only one execution
-        if tries<30:
+        if tries < 30:
             envs = os.environ
 #            envs['LANG'] = 'es_ES.UTF-8'
             cmd = 'gecos-chef-client-wrapper'

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2004-2006 Red Hat Inc. <http://www.redhat.com/>
@@ -31,12 +31,17 @@ import traceback
 import dbus
 import dbus.mainloop.glib
 
-import gobject
-import gtk
+from gi.repository import GObject
+from gi.repository import GLib
+
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
 
 import os
-import pynotify
 import subprocess
+gi.require_version('Notify', '0.7')
+from gi.repository import Notify
 
 DBUS_INTERFACE = "org.gecos.snitch"
 DBUS_PATH = "/org/gecos/snitch"
@@ -45,11 +50,11 @@ class ChefSnitchSystray:
     def __init__(self):
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
-        self.tray = gtk.StatusIcon()
+        self.tray = Gtk.StatusIcon()
         self.tray.set_from_icon_name("emblem-system-symbolic");
         #self.tray.connect("popup-menu", self.on_right_click)
         self.tray.connect("activate", self.on_activate)
-        self.tray.set_tooltip("GECOS Snitch")
+        self.tray.set_tooltip_text("GECOS Snitch")
 
         self.bus = dbus.SystemBus()
         self.bus.add_signal_receiver(self.is_active_has_changed_cb, \
@@ -60,9 +65,9 @@ class ChefSnitchSystray:
                                      dbus_interface = DBUS_INTERFACE, \
                                      signal_name = "MessageNotified")
 
-        self.loop = gobject.MainLoop()
+        self.loop = GLib.MainLoop()
 
-        pynotify.init("GECOS Snitch")
+        Notify.init("GECOS Snitch")
         self.update_status()
 
     def on_right_click(self, icon, event_button, event_time):
@@ -75,39 +80,39 @@ class ChefSnitchSystray:
             subprocess.Popen(["sudo", "/usr/bin/chef-client"])
 
     def on_activate(self, icon):
-        event = gtk.get_current_event()
+        event = Gtk.get_current_event()
 
-        menu = gtk.Menu()
+        menu = Gtk.Menu()
 
-        update = gtk.MenuItem("Update")
+        update = Gtk.MenuItem()
+        update.set_label('Update')
         update.show()
         menu.append(update)
         update.connect("activate", self.__trigger_update)
 
-        menu.popup(None, None, gtk.status_icon_position_menu,
-                   event.button, int(event.get_time()), self.tray)
+        menu.popup(None, None, None, None, 0, int(event.get_time()))
 
     def make_menu(self, event_button, event_time):
-        menu = gtk.Menu()
+        menu = Gtk.Menu()
 
         # show about dialog
-        about = gtk.MenuItem("About")
+        about = Gtk.MenuItem()
+        about.set_label('About')
         about.show()
         menu.append(about)
         about.connect("activate", self.show_about_dialog)
 
         # Re-enable if you want the user to close this system tray icon
         ## add quit item
-        #quit = gtk.MenuItem("Quit")
+        #quit = Gtk.MenuItem("Quit")
         #quit.show()
         #menu.append(quit)
         #quit.connect("activate", self.__loop_quit)
 
-        menu.popup(None, None, gtk.status_icon_position_menu,
-                   event_button, event_time, self.tray)
+        menu.popup(None, None, None, None, 0, int(event_time))
 
     def show_about_dialog(self, widget):
-        about_dialog = gtk.AboutDialog()
+        about_dialog = Gtk.AboutDialog()
         about_dialog.set_destroy_with_parent (True)
         about_dialog.set_icon_name ("GECOS Snitch")
         about_dialog.set_name("GECOS Snitch")
@@ -132,28 +137,28 @@ class ChefSnitchSystray:
     def update_status(self):
         if (self.get_is_active()):
             self.tray.set_from_icon_name("emblem-synchronizing-symbolic");
-            self.tray.set_tooltip("Chef is running right now, do not turn off " \
-                                  "your computer until this task finish")
+            self.tray.set_tooltip_text("Chef is running right now, do not turn \
+                off your computer until this task finish")
         else:
             self.tray.set_from_icon_name("emblem-system-symbolic");
-            self.tray.set_tooltip("GECOS Snitch")
+            self.tray.set_tooltip_text("GECOS Snitch")
 
     def is_active_has_changed_cb(self):
         is_active = self.get_is_active()
-        print ("The value of IsActive has changed to: %r" % (bool(is_active)))
+        print("The value of IsActive has changed to: %r" % (bool(is_active)))
 
         self.update_status()
 
     def message_notified_cb(self):
         message = self.get_message()
-        print ("A new message has been delivered: %s" % (message))
+        print("A new message has been delivered: %s" % (message))
         self.notify("GECOS notification", message)
 
     # Simple notifications
     # If you want to add actions:
     # http://ubuntuforums.org/showthread.php?t=447613
     def notify(self, summary, body):
-        n = pynotify.Notification(summary, body, "emblem-system-symbolic")
+        n = Notify.Notification.new(summary, body)
         n.show()
 
 if __name__ == "__main__":

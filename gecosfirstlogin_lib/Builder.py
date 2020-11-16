@@ -24,7 +24,8 @@ __license__ = "GPL-2"
 '''Enhances builder connections, provides object to access glade objects'''
 
 from gi.repository import GObject  # pylint: disable=E0611
-
+import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import inspect
 import functools
@@ -60,8 +61,7 @@ class Builder(Gtk.Builder):
 
 # pylint: disable=R0201
 # this is a method so that a subclass of Builder can redefine it
-    def default_handler(self,
-        handler_name, filename, *args, **kwargs):
+    def default_handler(self, handler_name, filename, *args, **kwargs):
         '''helps the apprentice guru
 
     glade defined handlers that do not exist come here instead.
@@ -220,7 +220,7 @@ def getmembers(object, predicate=None):
     for key in dir(object):
         try:
             value = getattr(object, key)
-        except AttributeError, RuntimeError:
+        except (AttributeError, RuntimeError):
             continue
         except Exception:
             continue
